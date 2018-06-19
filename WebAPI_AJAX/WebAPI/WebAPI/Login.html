@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/bootstrap.min.js"></script>
+    <title></title>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let cb = `off`;
+            $("#cbRemember").click(function () {
+                if (cb == `off`) {
+                    cb = `on`;
+                }
+                else if (cb == `on`) {
+                    cb = `off`;
+                }
+            });
+
+            $("#btnLogin").click(function () {
+                var username1 = $("#txtUsername").val();
+                var password1 = $("#txtPassword").val();
+                var chekbox = $("#cbRemember").val();
+
+                if (cb == `on`) {
+                    $.get("/api/Login/SaveCookie/", { un: username1 }, function () { })
+                        .fail(function () {
+                            alert(`Nije zapamtio cookie`)
+                        });
+                }
+
+                $.post("/api/Login", { username: username1, password: password1, remember: cb }, function (data) {
+                    switch (data) {
+                        case `Admin`:
+                            location.href = `Dispatcher.html`;
+                            break;
+                        case `Driver`:
+                            location.href = `Driver.html`;
+                            break;
+                        case `Customer`:
+                            location.href = `Customer.html`;
+                            break;
+                        default:
+                    }
+                });                
+            });
+
+        });
+    </script>
+</head>
+<body style="padding:200px 500px 200px 500px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="success">
+                <th colspan="2">
+                    Login
+                    <a href="Registracija.html" class="btn btn-success pull-right">
+                        Registrujte se
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Korisnicko ime:</td>
+                <td>
+                    <input type="text" id="txtUsername" placeholder="Korisnicko ime..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Sifra:</td>
+                <td>
+                    <input type="password" id="txtPassword"
+                           placeholder="Sifra..." />
+                </td>
+            </tr>
+            <tr class="success">
+                <td colspan="2">
+                    <input id="btnLogin" class="btn btn-success pull-right" type="button"
+                           value="Login" />
+                    <input id="cbRemember" type="checkbox" name="Remember"/>Remember me
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

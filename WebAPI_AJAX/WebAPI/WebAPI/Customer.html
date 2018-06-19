@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/MyScript.js"></script>
+    <script src="Scripts/MyScript1.js"></script>
+    <title></title>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*setInterval(function () {
+                $("#write").html(window.location.href + "#write");
+            }, 5000);*/
+            $("#btnLogout").click(function () {
+                $.get("/api/Login");
+                location.href = "Login.html";
+            });
+            let user;
+            $.get("/api/Customer", function (data) {
+                user = data;
+                $("#writelink").html(data.UserName + `<span class="caret"></span>`);
+                alert(user.UserName);
+                $.get("/api/Customer", { username: data.UserName }, function (data1) {
+                    alert(data1[0].DateTime);
+                    writeUserDrives(data1);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                });
+            });
+
+            $("#btnWriteDrives").click(function () {            
+                $.get("/api/Customer", { username: user.UserName }, function (data) {
+                    alert(data[0].DateTime);
+                    writeUserDrives(data);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                        });
+            });
+
+            $("#writeuserdata").click(function () {
+                writeUserData(user);
+            });
+
+            $("#writechangedata").click(function () {
+                writeChangeUserData(user);
+            });
+            $("#writechangepassword").click(function () {
+                writeChangePassword(user);
+            });
+            $("#btnAddDrive").click(function () {
+                writeNewDrive(user);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Customer</h2>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-nav">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="home" href="#">Home</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <div class="navbar-form navbar-right">
+                    <button type="button" id="btnLogout" class="btn navbar-btn btn-sm">
+                        <span class="glyphicon glyphicon-log-out"></span> Log out
+                    </button>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="writelink" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="writeuserdata" href="#">User data</a></li>
+                            <li><a id="writechangedata" href="#">Change user data</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a id="writechangepassword" href="#">Change password</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <p id="write">
+
+    </p>
+
+    <button type="button" id="btnWriteDrives" class="btn btn-sm">
+        <span class="glyphicon glyphicon-arrow-down"></span> List user drives
+    </button>
+
+    <button type="button" id="btnAddDrive" class="btn btn-sm">
+        <span class="glyphicon glyphicon-plus"></span> New Drive
+    </button>
+
+    <div id="divwriteuserdata"></div>
+
+</body>
+</html>
