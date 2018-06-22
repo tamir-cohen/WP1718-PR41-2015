@@ -122,7 +122,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="HTMLs\" />
     <Folder Include="Views\Default\" />
   </ItemGroup>
@@ -183,7 +182,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Admins.xml" />
+    <Content Include="App_Data\Admins.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -223,6 +222,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MyScript.js" />
     <Content Include="Scripts\MyScript1.js" />
+    <Content Include="Scripts\MyScript2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Web.config" />

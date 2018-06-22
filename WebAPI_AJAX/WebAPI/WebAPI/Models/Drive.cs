@@ -25,5 +25,20 @@ namespace WebAPI.Models
             Id = UniqueId;
             UniqueId++;
         }
+
+        public override bool Equals(object obj)
+        {
+            if(obj.GetType() != GetType() || obj == null)
+            {
+                return false;
+            }
+
+            return Id == ((Drive)obj).Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

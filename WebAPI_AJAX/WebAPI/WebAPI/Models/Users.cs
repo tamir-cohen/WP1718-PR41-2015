@@ -11,7 +11,7 @@ namespace WebAPI.Models
     {
         public Users(string path)
         {
-            Drivers = new List<User>();
+            Drivers = new List<Driver>();
             Customers = new List<User>();
             Dispatchers = new List<Dispatcher>();
 
@@ -50,6 +50,6 @@ namespace WebAPI.Models
 
         public static List<Dispatcher> Dispatchers { get; set; }
         public static List<User> Customers { get; set; }
-        public static List<User> Drivers { get; set; }
+        public static List<Driver> Drivers { get; set; }
     }
 }

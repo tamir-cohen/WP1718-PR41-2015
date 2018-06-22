@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="Content/bootstrap.min.css">
     <script src="Scripts/bootstrap.min.js"></script>
     <script src="Scripts/MyScript.js"></script>
+    <script src="Scripts/MyScript1.js"></script>
+    <script src="Scripts/MyScript2.js"></script>
     <title></title>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -24,7 +26,6 @@
                 user = data;
                 $("#write").html(data.UserName);
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
-                alert(user.UserName);
             });
 
             $("#writeuserdata").click(function () {
@@ -36,6 +37,30 @@
             });
             $("#writechangepassword").click(function () {
                 writeChangePassword(user);
+            });
+
+            $("#btnWriteDrives").click(function () {
+                $.get("/api/Dispatcher/GetAllDrives", function (data) {
+                    writeDispDrives(data, user);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                });
+            });
+
+            $("#btnAddDrive").click(function () {
+                $.get("/api/Dispatcher/GetAvailableDrivers", function (data) {
+                    writeNewDispDrive(user, data);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                });
+            });
+
+            $("#btnWriteMyDrives").click(function () {
+                $.get("/api/Dispatcher/GetMyDrives/", { username: user.UserName }, function (data) {
+                    writeDispDrives(data, user);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                });
             });
         });
     </script>
@@ -85,6 +110,18 @@
     <p id="write">
 
     </p>
+
+    <button type="button" id="btnWriteDrives" class="btn btn-sm">
+        <span class="glyphicon glyphicon-arrow-down"></span> List all drives
+    </button>
+
+    <button type="button" id="btnWriteMyDrives" class="btn btn-sm">
+        <span class="glyphicon glyphicon-circle-arrow-right"></span> List my drives
+    </button>
+
+    <button type="button" id="btnAddDrive" class="btn btn-sm">
+        <span class="glyphicon glyphicon-plus"></span> New Drive
+    </button>
 
     <div id="divwriteuserdata"></div>
 </body>

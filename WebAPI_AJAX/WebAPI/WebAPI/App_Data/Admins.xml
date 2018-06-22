@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDispatcher xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Dispatcher>
+    <UserName>admin</UserName>
+    <Password>admin</Password>
+    <Name>Stefan</Name>
+    <Surname>Stefanovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>1212988153886</UPRN>
+    <ContactNumber>021/212-467</ContactNumber>
+    <Email>admin@yahoo.com</Email>
+    <Role>Admin</Role>
+    <Drives />
+  </Dispatcher>
+  <Dispatcher>
+    <UserName>admin1</UserName>
+    <Password>admin1</Password>
+    <Name>Petar</Name>
+    <Surname>Petrovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>1406990426111</UPRN>
+    <ContactNumber>021/888-888</ContactNumber>
+    <Email>admin1@yahoo.com</Email>
+    <Role>Admin</Role>
+    <Drives />
+  </Dispatcher>
+  <Dispatcher>
+    <UserName>admin2</UserName>
+    <Password>admin2</Password>
+    <Name>Zivorad</Name>
+    <Surname>Zivoradovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>2810996123456</UPRN>
+    <ContactNumber>021/123-456</ContactNumber>
+    <Email>admin2@yahoo.com</Email>
+    <Role>Admin</Role>
+    <Drives />
+  </Dispatcher>
+</ArrayOfDispatcher>

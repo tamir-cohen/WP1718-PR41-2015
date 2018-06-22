@@ -18,6 +18,50 @@ namespace WebAPI.Controllers
             return driver;
         }
 
+        [HttpGet]
+        [Route("api/Driver/GetAllDrives")]
+        public List<Drive> GetAllDrives()
+        {
+            List<Drive> ret = new List<Drive>();
+            foreach (var item in Users.Customers)
+            {
+                ret.AddRange(item.Drives.Where(d => d.DriveStatus == DriveStatus.Created_Waiting));
+            }
+
+            return ret;
+        }
+
+        [HttpGet]
+        [Route("api/Driver/GetMyDrives")]
+        public List<Drive> GetMyDrives(string username)
+        {
+            return Users.Drivers.First(d => d.UserName == username).Drives;
+        }
+
+        [HttpGet]
+        [Route("api/Driver/TakeDrive/")]
+        public void TakeDrive(string drive, string user)
+        {
+            int driveid = int.Parse(drive.Substring(1));
+
+            Drive driveadd = null;
+            foreach (var item in Users.Customers)
+            {
+                foreach (var item1 in item.Drives)
+                {
+                    if(item1.Id == driveid)
+                    {
+                        item1.Driver = user;
+                        item1.DriveStatus = DriveStatus.Approved;
+                        driveadd = item1;
+                        break;
+                    }
+                }
+            }
+
+            Users.Drivers.First(d => d.UserName == user).Drives.Add(driveadd);
+        }
+
         // POST: api/Dispather
         public HttpResponseMessage Post([FromBody]Driver value)
         {
@@ -37,6 +81,31 @@ namespace WebAPI.Controllers
             message.StatusCode = HttpStatusCode.NotAcceptable;
 
             return message;
+        }
+
+        [HttpPost]
+        [Route("api/Driver/FinishDriveFail/")]
+        public void FinishDriveFail([FromBody]Comment comment)
+        {
+            int driveid = int.Parse(comment.Drive.Substring(1));
+            comment.DateTime = DateTime.Now;
+            Users.Drivers.First(d => d.UserName == comment.User).Drives.First(d => d.Id == driveid).Comment = comment;
+            Users.Drivers.First(d => d.UserName == comment.User).Drives.First(d => d.Id == driveid).DriveStatus = DriveStatus.Failed;
+            Users.Drivers.First(d => d.UserName == comment.User).Available = true;
+        }
+
+        [HttpGet]
+        [Route("api/Driver/FinishDriveSuccess/")]
+        public void FinishDriveSuccess(string address, string x, string y, string price, string drive, string driver)
+        {
+            int driveid = int.Parse(drive.Substring(1));
+            int driveprice;
+            int.TryParse(price, out driveprice);
+            Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).Price = driveprice;
+            Location endLocation = new Location() { Address=address, X=x, Y=y };
+            Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).EndLocation = endLocation;
+            Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).DriveStatus = DriveStatus.Successful;
+            Users.Drivers.First(d => d.UserName == driver).Available = true;
         }
 
         // PUT: api/Driver/5

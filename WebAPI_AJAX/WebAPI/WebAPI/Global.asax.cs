@@ -21,7 +21,8 @@ namespace WebAPI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            Users users = new Users(@"C:\Users\Obren Milošević\Downloads\Web\Projekat\WebAPI_AJAX\WebAPI\WebAPI\Admins.xml");
+            string path = Server.MapPath("~/App_Data/Admins.xml");
+            Users users = new Users(path);
         }
 
         public override void Init()
