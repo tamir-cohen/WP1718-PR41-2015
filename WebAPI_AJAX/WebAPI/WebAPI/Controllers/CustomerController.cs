@@ -30,7 +30,6 @@ namespace WebAPI.Controllers
         public Customer Get()
         {
             Customer customer = (Customer)HttpContext.Current.Session["MyUser1"];
-
             return customer;
         }
 
@@ -41,7 +40,7 @@ namespace WebAPI.Controllers
             Location location = new Location() { Address = address, X = x, Y = y };
             Drive drive = new Drive() {
                 Customer = temp.UserName,
-                DateTime = DateTime.Now,
+                DateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
                 DriveStatus = DriveStatus.Created_Waiting,
                 TypeOfCar = (CarType)car,
                 StartLocation = location
@@ -77,16 +76,11 @@ namespace WebAPI.Controllers
         [Route("api/Customer/RemoveDrive/")]
         public void RemoveDrive(string driveid, string username)
         {
-            int driveToRemove = -1;
+            int driveToRemove = int.Parse(driveid);
 
-            if (driveid.StartsWith("R"))
-            {
-                driveToRemove = int.Parse(driveid.Substring(1));
-
-                User user = Users.Customers.First(cust => cust.UserName == username);
-                int index = user.Drives.IndexOf(user.Drives.First(d => d.Id == driveToRemove));
-                Users.Customers.First(cust => cust.UserName == username).Drives[index].DriveStatus = DriveStatus.Canceled;
-            }
+            User user = Users.Customers.First(cust => cust.UserName == username);
+            int index = user.Drives.IndexOf(user.Drives.First(d => d.Id == driveToRemove));
+            Users.Customers.First(cust => cust.UserName == username).Drives[index].DriveStatus = DriveStatus.Canceled;
         }
 
         [HttpGet]
@@ -105,7 +99,7 @@ namespace WebAPI.Controllers
         [Route("api/Customer/PostComment/")]
         public void PostComment([FromBody]Comment comment)
         {
-            int driveid = int.Parse(comment.Drive.Substring(1));
+            int driveid = int.Parse(comment.Drive);
             Users.Customers.First(c => c.UserName == comment.User).Drives.First(d => d.Id == driveid).Comment = comment;
         }
 

@@ -102,7 +102,7 @@ namespace WebAPI.Controllers
             {
                 Driver = driver,
                 Dispatcher = Users.Dispatchers.First(d => d.UserName == username).UserName,
-                DateTime = DateTime.Now,
+                DateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
                 DriveStatus = DriveStatus.Created,
                 TypeOfCar = (CarType)car,
                 StartLocation = location
