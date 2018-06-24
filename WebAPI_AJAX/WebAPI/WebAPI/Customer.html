@@ -21,6 +21,10 @@
             let user;
             $.get("/api/Customer", function (data) {
                 user = data;
+                if (data.Banned) {
+                    $("body").attr(`style`, `padding:200px 400px 200px 400px`);
+                    $("body").html(`<p><b>Administrator banned your profile so you cannot perform any actions. Contact administrators for detailed info.</b></p>`);
+                }
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
                 $.get("/api/Customer", { username: data.UserName }, function (data1) {
                     writeUserDrives(data1);
@@ -108,5 +112,6 @@
     </button>
 
     <div id="divwriteuserdata"></div>
+    
 </body>
 </html>

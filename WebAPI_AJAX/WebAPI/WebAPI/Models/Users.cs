@@ -12,7 +12,7 @@ namespace WebAPI.Models
         public Users(string path)
         {
             Drivers = new List<Driver>();
-            Customers = new List<User>();
+            Customers = new List<Customer>();
             Dispatchers = new List<Dispatcher>();
 
             Customers.Add(new Customer() { UserName = "musterija", Password = "musterija", Role = Roles.Customer });
@@ -49,7 +49,7 @@ namespace WebAPI.Models
         }
 
         public static List<Dispatcher> Dispatchers { get; set; }
-        public static List<User> Customers { get; set; }
+        public static List<Customer> Customers { get; set; }
         public static List<Driver> Drivers { get; set; }
     }
 }

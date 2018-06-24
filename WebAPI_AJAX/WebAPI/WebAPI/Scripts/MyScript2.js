@@ -2,28 +2,20 @@
     switch (drivestatus) {
         case 0:
             return `Created & Waiting`;
-            break;
         case 1:
             return `Created`;
-            break;
         case 2:
             return `Processed`;
-            break;
         case 3:
             return `Taken`;
-            break;
         case 4:
             return `Canceled`;
-            break;
         case 5:
             return `Failed`;
-            break;
         case 6:
             return `Successful`;
-            break;
         default:
             return `Unknown status`;
-            break;
     }
 };
 
@@ -31,16 +23,25 @@ let carTypeToString = function (cartype) {
     switch (cartype) {
         case 0:
             return `Unspecified`;
-            break;
         case 1:
             return `Passenger car`;
-            break;
         case 2:
             return `Van`;
-            break;
         default:
             return `Unknown type`;
-            break;
+    }
+};
+
+let roleToString = function (role) {
+    switch (role) {
+        case 0:
+            return `Admin`;
+        case 1:
+            return `Driver`;
+        case 2:
+            return `Customer`;
+        default:
+            return `Unknown role`;
     }
 };
 
@@ -57,7 +58,8 @@ let writeDriverDrives = function (data, username) {
         temp += (`<td>${(data[drive].StartLocation == null) ? `-` : data[drive].StartLocation.Address}</td>`);
         temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
-        temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
+        temp += (`<td>${(data[drive].Comment == null) ? `-` : writeModal(data[drive].Comment)}</td >`);
+        //temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Rate}</td>`);
         temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="T${data[drive].Id}" type="button" name="Take" value="Take drive"/></td>` : ``);
         temp += ((data[drive].DriveStatus == `1` || data[drive].DriveStatus == `2` || data[drive].DriveStatus == `3`) ? `<td><input id="F${data[drive].Id}" name="Finish" type="button" value="Finish drive"/></td>` : ``);
@@ -112,7 +114,11 @@ let writeDriverDrives = function (data, username) {
     </div>`);
 
     $("#startdatetime").change(function () {
-        display($("#startdatetime"), $("#enddatetime"));
+        searchByDate($("#startdatetime").val(), $("#enddatetime").val());
+    });
+
+    $("#enddatetime").change(function () {
+        searchByDate($("#startdatetime").val(), $("#enddatetime").val());
     });
 
     $("#startrate").keyup(function () {
@@ -329,20 +335,51 @@ function comparer(index) {
 };
 function getCellValue(row, index) { return $(row).children('td').eq(index).text() };
 
-function display(startDate, endDate) {
-    var startDateTimeStamp = new Date(startDate).getTime();
-    var endDateTimeStamp = new Date(endDate).getTime();
-
-    $("#table tbody tr").each(function () {
-        var rowDate = $(this).find('td:eq(0)').html();
-
-        var rowDateTimeStamp = new Date(rowDate).getTime();
-        if (startDateTimeStamp <= rowDateTimeStamp && rowDateTimeStamp <= endDateTimeStamp) {
-            $(this).hide;
-        } else {
-            $(this).show;
+function searchByDate(startDate, endDate) {
+    if (startDate == "" && endDate == "") {
+        $("#table tbody tr").each(function () {
+            $(this).show();
+        });
+    } else {
+        if (endDate == "") {
+            var startDateTimeStamp = new Date(startDate).getTime();
+            $("#table tbody tr").each(function () {
+                var rowDate = $(this).find('td:eq(0)').html();
+                var rowDateTimeStamp = new Date(rowDate).getTime();
+                if (startDateTimeStamp <= rowDateTimeStamp) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
         }
-    });
+        else if (startDate == "") {
+            var endDateTimeStamp = new Date(startDate).getTime();
+            $("#table tbody tr").each(function () {
+                var rowDate = $(this).find('td:eq(0)').html();
+                var rowDateTimeStamp = new Date(rowDate).getTime();
+                if (endDateTimeStamp >= rowDateTimeStamp) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+        else {
+            var startDateTimeStamp = new Date(startDate).getTime();
+            var endDateTimeStamp = new Date(endDate).getTime();
+            $("#table tbody tr").each(function () {
+                var rowDate = $(this).find('td:eq(0)').html();
+
+                var rowDateTimeStamp = new Date(rowDate).getTime();
+                if (startDateTimeStamp <= rowDateTimeStamp && rowDateTimeStamp <= endDateTimeStamp) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    }
 };
 
 function searchByPrice(minval, maxval, index) {
@@ -358,5 +395,148 @@ function searchByPrice(minval, maxval, index) {
         } else {
             $(this).hide()
         }
+    });
+};
+
+let writeModal = function (data) {
+    return `<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Open comment</button>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Comment</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Date & time: ${data.DateTime}</p>
+                    <p>Author: ${data.User}</p>
+                    <p>Drive id: ${data.Drive}</p>
+                    <p>Rate: ${data.Rate}</p></br>
+                    <p>Description: <textarea rows="3" cols="50" readonly="true">${data.Description}</textarea></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>`
+};
+
+let addNewDriver = function () {
+    $("#divwriteuserdata").html(`<table class="table table-bordered">
+        <thead>
+            <tr class="success">
+                <th colspan="2">
+                    Register new driver                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Username:</td>
+                <td>
+                    <input type="text" id="txtUsername" placeholder="Korisnicko ime..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td>
+                    <input type="password" id="txtPassword"
+                           placeholder="Sifra..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>
+                    <input type="text" id="txtName"
+                           placeholder="Ime..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Surname:</td>
+                <td>
+                    <input type="text" id="txtSurname"
+                           placeholder="Prezime..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Contact number:</td>
+                <td>
+                    <input type="text" id="txtNumber"
+                           placeholder="Number..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <input type="radio" name="gender" checked="checked" value="0">  Male&nbsp;&nbsp;
+                    <input type="radio" name="gender" value="1">  Female
+                </td>
+            </tr>
+            <tr>
+                <td>UPRN:</td>
+                <td>
+                    <input type="text" id="txtUPRN"
+                           placeholder="Unique personal registration number..." />
+                </td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <input type="email" id="txtEmail" placeholder="Email..." />
+                </td>
+            </tr>
+            <tr class="success">
+                <td colspan="2">
+                    <input id="btnRegister" class="btn btn-success" type="button"
+                           value="Register" />
+                </td>
+            </tr>
+        </tbody>
+    </table>`);
+
+    $("#btnRegister").click(function () {
+        var username = $("#txtUsername").val();
+        var password = $("#txtPassword").val();
+        var name = $("#txtName").val();
+        var surname = $("#txtSurname").val();
+        var number = $("#txtNumber").val();
+        var gender = $("input[name=gender]:checked").val();
+        var uprn = $("#txtUPRN").val();
+        var email = $("#txtEmail").val();
+
+        $.post("/api/Dispatcher/AddNewDriver/", { username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
+        }).done(function () {
+            alert(`New driver registered`);
+            location.href = "Dispatcher.html";
+        })
+            .fail(function () {
+                alert('Username already exists. Try again');
+            });
+
+    });
+};
+
+let writeUsers = function (data) {
+    var temp = ``;
+    for (user in data) {
+        temp += (`<tr><td>${data[user].split(`-`)[0]}</td><td>${data[user].split(`-`)[1]}</td><td>`);
+        temp += ((data[user].split(`-`)[2] == `False`) ? `<button id="${data[user].split(`-`)[0]}" name="submit">Block</button>` : `<button id="${data[user].split(`-`)[0]}" name="submit">Unblock</button>`);
+        temp += `</td></tr>`;
+    }
+    $("#divwriteuserdata").html(`
+    <table class="table table-bordered">
+        <thead><tr colspan="2"><td>Customers/Drivers</td></tr></thead>
+        <tbody>
+            ${temp}
+        </tbody>
+    </table>
+    `);
+
+    $("button[name=submit]").click(function () {
+        $.get("/api/Dispatcher/BlockUser/", { username: this.id }, function (data1) {
+            writeUsers(data1);
+        })
+            .fail(function () { alert(`Cannot perform block/unblock`);});
     });
 };

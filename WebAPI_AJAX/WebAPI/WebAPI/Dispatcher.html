@@ -62,6 +62,16 @@
                     alert(`greska u getu`);
                 });
             });
+            $("#btnAddDriver").click(function () {
+                addNewDriver();
+            });
+            $("#btnGetUsers").click(function () {
+                $.get("/api/Dispatcher/GetUsers/", function (data) {
+                    writeUsers(data);
+                }).fail(function () {
+                    alert(`greska u getu`);
+                });
+            });
         });
     </script>
 </head>
@@ -115,12 +125,20 @@
         <span class="glyphicon glyphicon-arrow-down"></span> List all drives
     </button>
 
+    <button type="button" id="btnAddDriver" class="btn btn-sm">
+        <span class="glyphicon glyphicon-plus"></span> Add new driver
+    </button>
+
     <button type="button" id="btnWriteMyDrives" class="btn btn-sm">
         <span class="glyphicon glyphicon-circle-arrow-right"></span> List my drives
     </button>
 
     <button type="button" id="btnAddDrive" class="btn btn-sm">
         <span class="glyphicon glyphicon-plus"></span> New Drive
+    </button>
+
+    <button type="button" id="btnGetUsers" class="btn btn-sm">
+        <span class="glyphicon glyphicon-list"></span> Customers/Drivers
     </button>
 
     <div id="divwriteuserdata"></div>

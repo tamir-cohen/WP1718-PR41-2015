@@ -10,6 +10,7 @@ namespace WebAPI.Models
         public Location Location { get; set; }
         public Car Car { get; set; }
         public bool Available { get; set; }
+        public bool Banned { get; set; }
 
         public Driver()
         {
@@ -17,6 +18,7 @@ namespace WebAPI.Models
             Available = true;
             Car = new Car();
             this.Drives = new List<Drive>();
+            Banned = false;
         }
     }
 }

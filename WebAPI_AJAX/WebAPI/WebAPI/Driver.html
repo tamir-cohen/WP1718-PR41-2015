@@ -21,6 +21,10 @@
             let user = ``;
             $.get("/api/Driver", function (data) {
                 user = data;
+                if (data.Banned) {
+                    $("body").attr(`style`, `padding:200px 400px 200px 400px`);
+                    $("body").html(`<p><b>Administrator banned your profile so you cannot perform any actions. Contact administrators for detailed info.</b></p>`);
+                }
                 $("#write").html(data.UserName);
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
             });

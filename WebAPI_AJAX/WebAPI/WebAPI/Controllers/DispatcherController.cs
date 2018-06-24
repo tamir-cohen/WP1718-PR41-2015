@@ -113,6 +113,60 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == driver).Available = false;
         }
 
+        [HttpPost]
+        [Route("api/Dispatcher/AddNewDriver/")]
+        public HttpResponseMessage AddNewDriver([FromBody]Driver value)
+        {
+            value.Role = Roles.Driver;
+            HttpResponseMessage message = new HttpResponseMessage();
+
+            if ((Users.Dispatchers.FirstOrDefault(disp => disp.UserName == value.UserName)) == null)
+                if (Users.Customers.FirstOrDefault(disp => disp.UserName == value.UserName) == null)
+                    if (Users.Drivers.FirstOrDefault(disp => disp.UserName == value.UserName) == null)
+                    {
+                        Users.Drivers.Add(value);
+                        message.StatusCode = HttpStatusCode.OK;
+                        return message;
+                    }
+
+            message.StatusCode = HttpStatusCode.NotAcceptable;
+
+            return message;
+        }
+
+        [HttpGet]
+        [Route("api/Dispatcher/GetUsers")]
+        public List<string> GetUsers()
+        {
+            List<string> ret = new List<string>();
+            foreach (var item in Users.Customers)
+            {
+                ret.Add(String.Format($"{item.UserName}-{item.Role.ToString()}-{item.Banned}"));
+            }
+            foreach (var item in Users.Drivers)
+            {
+                ret.Add(String.Format($"{item.UserName}-{item.Role.ToString()}-{item.Banned}"));
+            }
+
+            return ret;
+        }
+
+        [HttpGet]
+        [Route("api/Dispatcher/BlockUser/")]
+        public List<string> BlockUser(string username)
+        {
+            if(Users.Customers.FirstOrDefault(c => c.UserName == username) != null)
+            {
+                Users.Customers.First(c => c.UserName == username).Banned = !Users.Customers.First(c => c.UserName == username).Banned;
+            }
+            else
+            {
+                Users.Drivers.FirstOrDefault(c => c.UserName == username).Banned = !Users.Drivers.First(c => c.UserName == username).Banned;
+            }
+
+            return GetUsers();
+        }
+
         // PUT: api/Dispather/5
         public void Put(int id, [FromBody]string value)
         {
