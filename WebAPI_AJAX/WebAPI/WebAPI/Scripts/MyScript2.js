@@ -399,8 +399,8 @@ function searchByPrice(minval, maxval, index) {
 };
 
 let writeModal = function (data) {
-    return `<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Open comment</button>
-    <div id="myModal" class="modal fade" role="dialog">
+    return `<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#MyModal${data.Drive}">Open comment</button>
+    <div id="MyModal${data.Drive}" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

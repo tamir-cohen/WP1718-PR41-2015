@@ -16,10 +16,14 @@
             }, 5000);*/
             $("#btnLogout").click(function () {
                 $.get("/api/Login/LogOut", function () { })
+                    .done(function () {
+                        alert(`izlogovao se`);
+                        location.href = "Login.html";
+                    })
                     .fail(function () {
                         alert(`nije se izlogovao`);
+                        location.href = "Login.html";
                     });
-                location.href = "Login.html";
             });
             let user = ``;
             $.get("/api/Dispatcher", function (data) {

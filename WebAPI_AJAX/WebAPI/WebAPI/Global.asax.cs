@@ -33,7 +33,7 @@ namespace WebAPI
 
         void myPostAuthenticateRequest(object sender, EventArgs e)
         {
-            System.Web.HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+            HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
         }
     }
 }

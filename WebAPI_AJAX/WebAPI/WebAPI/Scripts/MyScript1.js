@@ -344,11 +344,40 @@ let writeCommentInput = function (driveid, username) {
 let writeDispDrives = function (data, user) {
     let temp = ``;
     for (drive in data) {
+        var custname = ``;
+        var custsurname = ``;
+        var drivname = ``;
+        var drivsurname = ``;
+        $.ajax({
+            url: "/api/Dispatcher/GetUserNameAndSurname/",
+            type: "get",
+            async: false,
+            data: { username: data[drive].Customer },
+            success: function (response) {
+                custname = response.split(`-`)[0];
+                custsurname = response.split(`-`)[1];
+            }
+        });
+        $.ajax({
+            url: "/api/Dispatcher/GetUserNameAndSurname/",
+            type: "get",
+            async: false,
+            data: { username: data[drive].Driver },
+            success: function (response1) {
+                drivname = response1.split(`-`)[0];
+                drivsurname = response1.split(`-`)[1];
+            }
+        });
+
         temp += `<tr>`;
         temp += (`<td>${data[drive].DateTime}</td>`);
-        temp += (`<td>${data[drive].Customer}</td>`);
-        temp += (`<td>${data[drive].Dispatcher}</td>`);
-        temp += (`<td>${data[drive].Driver}</td>`);
+        temp += (`<td>${(data[drive].Customer == null) ? `-` : data[drive].Customer}</td>`);
+        temp += (`<td>${(data[drive].Customer == null) ? `-` : custname}</td>`);
+        temp += (`<td>${(data[drive].Customer == null) ? `-` : custsurname}</td>`);
+        temp += (`<td>${(data[drive].Dispatcher == null) ? `-` : data[drive].Dispatcher}</td>`);
+        temp += (`<td>${(data[drive].Driver == null) ? `-` : data[drive].Driver}</td>`);
+        temp += (`<td>${(data[drive].Driver == null) ? `-` : drivname}</td>`);
+        temp += (`<td>${(data[drive].Driver == null) ? `-` : drivsurname}</td>`);
         temp += (`<td class="col1">${driveStatusToString(data[drive].DriveStatus)}</td>`);
         temp += (`<td>${carTypeToString(data[drive].TypeOfCar)}</td>`);
         temp += (`<td>${(data[drive].StartLocation == null) ? `-` : data[drive].StartLocation.Address}</td>`);
@@ -358,7 +387,7 @@ let writeDispDrives = function (data, user) {
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Rate}</td>`);
         temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Process" type="button" value="Process drive"/>` : ``);
         temp += `</tr>`;
-    };
+    }
 
     $("#divwriteuserdata").html(`<table id="table" class="table table-bordered">
         <thead>
@@ -369,9 +398,13 @@ let writeDispDrives = function (data, user) {
         </tr>
         <tr class="success">    
             <th name="sort" style="cursor:pointer">Date & time<span name="span" class="glyphicon glyphicon-arrow-down"/></th>
-            <th>Customer</th>
+            <th>Customer username</th>
+            <th>Customer name</th>
+            <th>Customer surname</th>
             <th>Dispatcher</th>
-            <th>Driver</th>
+            <th>Driver username</th>
+            <th>Driver name</th>
+            <th>Driver surname</th>
             <th>Status</th>
             <th>Car type</th>
             <th>Start location</th>
@@ -405,7 +438,37 @@ let writeDispDrives = function (data, user) {
             <option value="Failed">Failed</option>
             <option value="Successful">Successful</option>
         </select>
+    </div>
+    <div>
+        Search drives by Driver name/surname: <input id="srcD" type="text"/><br/>
+        Search drives by Customer name/surname: <input id="srcC" type="text"/> 
     </div>`);
+
+    $("#srcD").keyup(function () {
+        var value = $(this).val().toLowerCase();
+        $("#table tbody tr").each(function () {
+            var rowName = $(this).find('td:eq(6)').text().toLowerCase();
+            var rowSurName = $(this).find('td:eq(7)').text().toLowerCase();
+            if ((rowName.indexOf(value) > -1) || (rowSurName.indexOf(value) > -1)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    $("#srcC").keyup(function () {
+        var value = $(this).val().toLowerCase();
+        $("#table tbody tr").each(function () {
+            var rowName = $(this).find('td:eq(2)').text().toLowerCase();
+            var rowSurName = $(this).find('td:eq(3)').text().toLowerCase();
+            if ((rowName.indexOf(value) > -1) || (rowSurName.indexOf(value) > -1)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
 
     $("#startdatetime").change(function () {
         display($("#startdatetime"), $("#enddatetime"));
@@ -417,10 +480,10 @@ let writeDispDrives = function (data, user) {
                 alert(`Interval limits don't match values`);
             }
             else {
-                searchByPrice($(this).val(), $("#endrate").val(), 10);
+                searchByPrice($(this).val(), $("#endrate").val(), 14);
             }
         } else {
-            searchByPrice($(this).val(), $("#endrate").val(), 10);
+            searchByPrice($(this).val(), $("#endrate").val(), 14);
         }
     });
 
@@ -430,10 +493,10 @@ let writeDispDrives = function (data, user) {
                 alert(`Interval limits don't match values`);
             }
             else {
-                searchByPrice($("#startrate").val(), $(this).val(), 10);
+                searchByPrice($("#startrate").val(), $(this).val(), 14);
             }
         } else {
-            searchByPrice($("#startrate").val(), $(this).val(), 10);
+            searchByPrice($("#startrate").val(), $(this).val(), 14);
         }
     });
 
@@ -443,10 +506,10 @@ let writeDispDrives = function (data, user) {
                 alert(`Interval limits don't match values`);
             }
             else {
-                searchByPrice($(this).val(), $("#endprice").val(), 8);
+                searchByPrice($(this).val(), $("#endprice").val(), 12);
             }
         } else {
-            searchByPrice($(this).val(), $("#endprice").val(), 8);
+            searchByPrice($(this).val(), $("#endprice").val(), 12);
         }
     });
 
@@ -456,10 +519,10 @@ let writeDispDrives = function (data, user) {
                 alert(`Interval limits don't match values`);
             }
             else {
-                searchByPrice($("#startprice").val(), $(this).val(), 8);
+                searchByPrice($("#startprice").val(), $(this).val(), 12);
             }
         } else {
-            searchByPrice($("#startprice").val(), $(this).val(), 8);
+            searchByPrice($("#startprice").val(), $(this).val(), 12);
         }
     });
 

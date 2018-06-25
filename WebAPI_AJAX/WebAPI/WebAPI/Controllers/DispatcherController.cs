@@ -152,6 +152,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("api/Dispatcher/GetUserNameAndSurname/")]
+        public string GetUserNameAndSurname(string username)
+        {
+            string ret = "";
+
+            if(Users.Customers.FirstOrDefault(c => c.UserName == username) != null)
+                ret = Users.Customers.FirstOrDefault(c => c.UserName == username).Name + "-" + Users.Customers.FirstOrDefault(c => c.UserName == username).Surname;
+            else if(Users.Drivers.FirstOrDefault(c => c.UserName == username) != null)
+                ret = Users.Drivers.FirstOrDefault(c => c.UserName == username).Name + "-" + Users.Drivers.FirstOrDefault(c => c.UserName == username).Surname;
+
+            return ret;
+        }
+
+        [HttpGet]
         [Route("api/Dispatcher/BlockUser/")]
         public List<string> BlockUser(string username)
         {

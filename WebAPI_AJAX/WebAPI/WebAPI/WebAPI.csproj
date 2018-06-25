@@ -169,6 +169,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Car.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Models\Drive.cs" />
     <Compile Include="Models\Driver.cs" />
     <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\json.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Users.cs" />
@@ -223,8 +225,12 @@
     <Content Include="Scripts\MyScript.js" />
     <Content Include="Scripts\MyScript1.js" />
     <Content Include="Scripts\MyScript2.js" />
+    <Content Include="Scripts\ol-debug.js" />
+    <Content Include="Scripts\ol.css" />
+    <Content Include="Scripts\ol.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\SettingMap.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

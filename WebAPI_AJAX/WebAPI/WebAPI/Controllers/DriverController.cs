@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -116,6 +118,28 @@ namespace WebAPI.Controllers
         // DELETE: api/Driver/5
         public void Delete(int id)
         {
+        }
+
+        [HttpPost]
+        [Route("api/Driver/SetLocation/")]
+        public void SetLocation([FromBody]JObject json)
+        {
+            string s = json.ToString();
+
+            IList<JToken> address_list = json["json"]["address"].Children().ToList();
+            IList<JToken> coordinates = json["json"]["boundingbox"].Children().ToList();
+            Location lok = new Location();
+            lok.X = coordinates[0].ToString().Trim(new char[] { '{', '}' });
+            lok.X = coordinates[2].ToString().Trim(new char[] { '{', '}' });
+            lok.Address = "";
+            foreach (var item in address_list)
+            {
+                string temp = item.ToString();
+                temp = temp.Replace("\"", "").Trim();
+                lok.Address += temp.Split(':')[1].Trim();
+            }
+            string username = Get().UserName;
+            Users.Drivers.First(d => d.UserName == username).Location = lok;
         }
     }
 }
