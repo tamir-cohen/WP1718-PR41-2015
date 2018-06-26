@@ -47,6 +47,7 @@ let roleToString = function (role) {
 
 let writeDriverDrives = function (data, username) {
     let temp = ``;
+    let data22 = data;
     for (drive in data) {
         temp += `<tr>`;
         temp += (`<td>${data[drive].DateTime}</td>`);
@@ -80,7 +81,7 @@ let writeDriverDrives = function (data, username) {
             <th>Driver</th>
             <th>Status</th>
             <th>Car type</th>
-            <th>Start location</th>
+            <th name="sortByDistance" style="cursor:pointer">Start location<span name="span" class="glyphicon glyphicon-arrow-down"/></th>
             <th>End location</th>
             <th name="sort" style="cursor:pointer">Price<span name="span" class="glyphicon glyphicon-arrow-down"/></th>
             <th>Comment</th>
@@ -187,6 +188,17 @@ let writeDriverDrives = function (data, username) {
         this.asc = !this.asc
         if (!this.asc) { rows = rows.reverse() }
         for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+    });
+
+    $("th[name=sortByDistance]").click(function () {
+        $.get("/api/Driver", function (user) {
+            var x1 = user.Location.X;
+            var y1 = user.Location.Y;
+            var ret = data22.sort(function (a, b) {
+                return GetAbsoluteDistance(a.StartLocation.X, x1, a.StartLocation.Y, y1) - GetAbsoluteDistance(b.StartLocation.X, x1, b.StartLocation.Y, y1);
+            });
+            writeDriverDrives(ret, username);
+        });
     });
 
     $('#cmbFilter').change(function () {
@@ -539,4 +551,15 @@ let writeUsers = function (data) {
         })
             .fail(function () { alert(`Cannot perform block/unblock`);});
     });
+};
+
+function GetAbsoluteDistance(x, x1, y, y1) {
+    var dx = parseFloat(x);
+    var dx1 = parseFloat(x1);
+    var dy = parseFloat(y);
+    var dy1 = parseFloat(y1);
+
+    var apsRastojanje = Math.pow((Math.pow((dx - dx1), 2) + Math.pow((dy - dy1), 2)), 0.5);
+    alert(apsRastojanje);
+    return apsRastojanje;
 };
