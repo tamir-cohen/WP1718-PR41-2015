@@ -19,9 +19,12 @@ namespace WebAPI.Models
             Customers.Add(new Customer() { UserName = "musterija1", Password = "musterija1", Role = Roles.Customer });
             Customers.Add(new Customer() { UserName = "musterija2", Password = "musterija2", Role = Roles.Customer });
 
-            Drivers.Add(new Driver() { UserName = "driver", Password = "driver", Role = Roles.Driver });
-            Drivers.Add(new Driver() { UserName = "driver1", Password = "driver1", Role = Roles.Driver });
-            Drivers.Add(new Driver() { UserName = "driver2", Password = "driver2", Role = Roles.Driver });
+            Drivers.Add(new Driver() { UserName = "driver", Password = "driver", Role = Roles.Driver, Location = new Location() {Address=new Address() { Street="spens"} ,X = "19.842747450238672", Y = "45.24866182125004" } });
+            Drivers.Add(new Driver() { UserName = "driver1", Password = "driver1", Role = Roles.Driver , Location = new Location() { Address = new Address() { Street = "futoska" }, X = "19.83619093894958", Y= "45.25161272572694" } });
+            Drivers.Add(new Driver() { UserName = "driver2", Password = "driver2", Role = Roles.Driver , Location = new Location() { Address = new Address() { Street = "sajmiste" }, X = "19.82398152351379", Y= "45.25387859375334" } });
+            Drivers.Add(new Driver() { UserName = "driver3", Password = "driver3", Role = Roles.Driver, Location = new Location() { Address = new Address() { Street = "sajmiste" }, X = "19.82398152351379", Y = "45.25387859375334" } });
+            Drivers.Add(new Driver() { UserName = "driver4", Password = "driver4", Role = Roles.Driver, Location = new Location() { Address = new Address() { Street = "centar" }, X = "19.846954643726345", Y = "45.254252453288956" } });
+            Drivers.Add(new Driver() { UserName = "driver5", Password = "driver5", Role = Roles.Driver, Location = new Location() { Address = new Address() { Street = "centar" }, X = "19.846954643726345", Y = "45.254252453288956" } });
 
             /*List<Dispatcher> dispatchers = new List<Dispatcher>()
             {

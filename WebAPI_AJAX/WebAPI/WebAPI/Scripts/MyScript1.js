@@ -7,7 +7,8 @@
     } else {
         html = `Customer`;
     }
-    $("#divwriteuserdata").html(`<table class="table table-bordered">
+    ShowMap("#divwriteuserdata");
+    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
         <thead>
         <tr class="success">
             <th colspan="2">
@@ -28,11 +29,12 @@
                 <input type="text" id="txtX"/>
                 <input type="text" id="txtY"/>
             </td>
+        </tr>
         <tr>
             <td>Type of car(not needed):</td>
             <td>
                 <select id="cmbCar">
-                    <option value="0">Unspecified</option>
+                    <option value="0">Default</option>
                     <option value="1">Passenger car</option>
                     <option value="2">Van</option>
                 </select>
@@ -47,18 +49,25 @@
     </table >`);
 
     $("#btnCreate").click(function () {
-        var address1 = $("#txtAddress").val();
-        var x1 = $("#txtX").val();
-        var y1 = $("#txtY").val();
         var car1 = $("#cmbCar").val();
 
-        $.get("/api/Customer", { address: address1, x: x1, y: y1, car: car1, customer: user.UserName }, function (data) {
-        }).done(function () {
-            alert(`Changes successfully saved`);
-            location.href = html + ".html";
+        $.post("/api/Customer/CreateDrive/", { json: jsonobj, car_type: car1 }, function () {
+            location.href = `Customer.html`;
         })
             .fail(function () {
-                alert(`error`);
+                alert(`error while sending address`);
+            });
+    });
+
+    $("#btnSubmitLoc").click(function () {
+        alert(jsonobj);
+        $.post("/api/Customer/GetLocation/", { json: jsonobj }, function (location) {
+            $("#txtAddress").val(location.Address.Street + location.Address.HomeNumber);
+            $("#txtX").val(location.X);
+            $("#txtY").val(location.Y);
+        })
+            .fail(function () {
+                alert(`error while sending location`);
             });
     });
 };
@@ -568,7 +577,8 @@ let writeNewDispDrive = function (user, drivers) {
     for (driver in drivers) {
         temp += `<option value="${drivers[driver].UserName}">${drivers[driver].UserName} - ${drivers[driver].Name}`+` ${drivers[driver].Surname}</option>`
     }
-    $("#divwriteuserdata").html(`<table class="table table - bordered">
+    ShowMap("#divwriteuserdata");
+    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
         <thead>
         <tr class="success">
             <th colspan="2">
@@ -616,6 +626,27 @@ let writeNewDispDrive = function (user, drivers) {
         </tbody>
     </table >`);
 
+    $("#btnSubmitLoc").click(function () {
+        alert(jsonobj);
+        $.post("/api/Dispatcher/GetLocation/", { json: jsonobj }, function (location) {
+            $("#txtAddress").val(location.Address.Street + location.Address.HomeNumber);
+            $("#txtX").val(location.X);
+            $("#txtY").val(location.Y);
+            $.get("/api/Dispatcher/GetClosestDrivers/", { x1: $("#txtX").val(), y1: $("#txtY").val() }, function (data) {
+                var temp1 = ``;
+                for (driver in data) {
+                    temp1 += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}` + ` ${data[driver].Surname}</option>`
+                }
+                $("#cmbDriver").html(temp1);
+            }).fail(function () {
+                alert(`greska u getu`);
+            });
+        })
+            .fail(function () {
+                alert(`error while sending location`);
+            });
+    });
+
     $("#btnCreate").click(function () {
         var address1 = $("#txtAddress").val();
         var x1 = $("#txtX").val();
@@ -636,7 +667,7 @@ let writeNewDispDrive = function (user, drivers) {
 
 let processDrive = function (driveid, user, customer) {
     let temp = ``;
-    $.get("/api/Dispatcher/GetAvailableDrivers", function (data) {
+    $.get("/api/Dispatcher/GetDrivers/", { username: customer, drive: driveid }, function (data) {
         for (driver in data) {
             temp += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}` + ` ${data[driver].Surname}</option>`;
         }

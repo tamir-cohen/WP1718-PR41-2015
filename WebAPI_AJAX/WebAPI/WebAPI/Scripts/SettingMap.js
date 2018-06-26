@@ -33,7 +33,7 @@ let foof1 = function () {
 let ShowMap = function (placeForMap) {
     $(placeForMap).html(`<h2>Location</h2>
     <button id="btnSubmitLoc">Submit location</button> 
-    <div id="map" class="map"></div>
+    <div id="map" class="map" style="float:left;width:50%;"></div>
     `);
     foo();
 };

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -71,8 +72,19 @@ namespace WebAPI.Controllers
             return Users.Drivers.Where(d => d.Available).ToList();
         }
 
-            // POST: api/Dispather
-            public HttpResponseMessage Post([FromBody]Dispatcher value)
+        [HttpGet]
+        [Route("api/Dispatcher/GetClosestDrivers")]
+        public List<Driver> GetClosestDrivers(string x1, string y1)
+        {
+            List<Driver> ret = new List<Driver>();
+            ret = Users.Drivers;
+            DriverComparer dc = new DriverComparer(x1, y1);
+            ret.Sort(dc);
+            return (ret.Where(d => d.Available).ToList().Count <= 5) ? ret.Where(d => d.Available).ToList() : ret.Where(d => d.Available).ToList().GetRange(0, 5);
+        }
+
+        // POST: api/Dispather
+        public HttpResponseMessage Post([FromBody]Dispatcher value)
         {
             value.Role = Roles.Admin;
             HttpResponseMessage message = new HttpResponseMessage();
@@ -176,9 +188,48 @@ namespace WebAPI.Controllers
             else
             {
                 Users.Drivers.FirstOrDefault(c => c.UserName == username).Banned = !Users.Drivers.First(c => c.UserName == username).Banned;
+                if (Users.Drivers.FirstOrDefault(c => c.UserName == username).Banned)
+                    Users.Drivers.FirstOrDefault(c => c.UserName == username).Available = false;
             }
 
             return GetUsers();
+        }
+
+        [HttpPost]
+        [Route("api/Dispatcher/GetLocation")]
+        public Location GetLocation([FromBody]JObject json)
+        {
+            string s = json.ToString();
+            IList<JToken> address_list = json["json"]["address"].Children().ToList();
+            Location lok = new Location();
+            lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
+            lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
+            lok.Address = new Address();
+            foreach (var item in address_list)
+            {
+                string temp = item.ToString();
+                temp = temp.Replace("\"", "").Trim();
+                if (temp.StartsWith("house_number"))
+                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("road"))
+                    lok.Address.Street = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("postcode"))
+                    lok.Address.PostCode = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("city"))
+                    lok.Address.City = temp.Split(':')[1].Trim();
+            }
+            return lok;
+        }
+
+        [HttpGet]
+        [Route("api/Dispatcher/GetDrivers")]
+        public List<Driver> GetDrivers(string username, string drive)
+        {
+            int driveid = int.Parse(drive);
+            string x1 = Users.Customers.FirstOrDefault(c => c.UserName == username).Drives.FirstOrDefault(d => d.Id == driveid).StartLocation.X;
+            string y1 = Users.Customers.FirstOrDefault(c => c.UserName == username).Drives.FirstOrDefault(d => d.Id == driveid).StartLocation.Y;
+
+            return GetClosestDrivers(x1, y1);
         }
 
         // PUT: api/Dispather/5
@@ -189,6 +240,41 @@ namespace WebAPI.Controllers
         // DELETE: api/Dispather/5
         public void Delete(int id)
         {
+        }
+    }
+
+    public class DriverComparer : IComparer<Driver>
+    {
+        public DriverComparer(string x1, string y1)
+        {
+            this.x1 = x1;
+            this.y1 = y1;
+        }
+
+        public string x1 { get; set; }
+        public string y1 { get; set; }
+
+        public int Compare(Driver d1, Driver d2)
+        {
+            double dist1 = GetAbsoluteDistance(d1.Location.X, x1, d1.Location.Y, y1);
+            double dist2 = GetAbsoluteDistance(d2.Location.X, x1, d2.Location.Y, y1);
+
+            return dist1.CompareTo(dist2);
+        }
+
+        public double GetAbsoluteDistance(string x, string x1, string y, string y1)
+        {
+            x = x.Replace(".", ",");
+            x1 = x1.Replace(".", ",");
+            y = y.Replace(".", ",");
+            y1 = y1.Replace(".", ",");
+
+            double dx = double.Parse(x);
+            double dx1 = double.Parse(x1);
+            double dy = double.Parse(y);
+            double dy1 = double.Parse(y1);
+
+            return Math.Sqrt(Math.Pow((dx - dx1), 2) + Math.Pow((dy - dy1), 2));
         }
     }
 }
