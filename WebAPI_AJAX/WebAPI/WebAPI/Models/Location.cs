@@ -9,6 +9,6 @@ namespace WebAPI.Models
     {
         public string X { get; set; }
         public string Y { get; set; }
-        public string Address { get; set; }
+        public Address Address { get; set; }
     }
 }

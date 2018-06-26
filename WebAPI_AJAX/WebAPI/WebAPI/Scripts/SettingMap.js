@@ -17,8 +17,10 @@ let foo = function () {
         var coord = ol.proj.toLonLat(evt.coordinate);
         alert(coord);
         reverseGeocode(coord);
-        alert(jsonobj);
     });
+}
+
+let foof1 = function () {
     $("#btnSubmitLoc").click(function () {
         alert(jsonobj);
         $.post("/api/Driver/SetLocation/", { json: jsonobj }, function () { })
@@ -28,8 +30,8 @@ let foo = function () {
     });
 }
 
-let ShowMap = function () {
-    $("#divwriteuserdata").html(`<h2>Location</h2>
+let ShowMap = function (placeForMap) {
+    $(placeForMap).html(`<h2>Location</h2>
     <button id="btnSubmitLoc">Submit location</button> 
     <div id="map" class="map"></div>
     `);

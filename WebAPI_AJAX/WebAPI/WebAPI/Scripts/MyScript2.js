@@ -50,17 +50,17 @@ let writeDriverDrives = function (data, username) {
     for (drive in data) {
         temp += `<tr>`;
         temp += (`<td>${data[drive].DateTime}</td>`);
-        temp += (`<td>${data[drive].Customer}</td>`);
-        temp += (`<td>${data[drive].Dispatcher}</td>`);
-        temp += (`<td>${data[drive].Driver}</td>`);
+        temp += (`<td>${(data[drive].Customer == null) ? `-` : data[drive].Customer}</td>`);
+        temp += (`<td>${(data[drive].Dispatcher == null) ? `-` : data[drive].Dispatcher}</td>`);
+        temp += (`<td>${(data[drive].Driver == null) ? `-` : data[drive].Driver}</td>`);
         temp += (`<td class="col1">${driveStatusToString(data[drive].DriveStatus)}</td>`);
         temp += (`<td>${data[drive].TypeOfCar}</td>`);
-        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : data[drive].StartLocation.Address}</td>`);
-        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
+        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : (data[drive].StartLocation.Address.Street + data[drive].StartLocation.Address.HomeNumber + "<br/>" + data[drive].StartLocation.Address.City + data[drive].StartLocation.Address.PostCode)}</td>`);
+        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : (data[drive].EndLocation.Address.Street + data[drive].EndLocation.Address.HomeNumber + "\n" + data[drive].EndLocation.Address.City + data[drive].EndLocation.Address.PostCode)}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : writeModal(data[drive].Comment)}</td >`);
         //temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
-        temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Rate}</td>`);
+        temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
         temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="T${data[drive].Id}" type="button" name="Take" value="Take drive"/></td>` : ``);
         temp += ((data[drive].DriveStatus == `1` || data[drive].DriveStatus == `2` || data[drive].DriveStatus == `3`) ? `<td><input id="F${data[drive].Id}" name="Finish" type="button" value="Finish drive"/></td>` : ``);
         temp += `</tr>`;
@@ -237,7 +237,10 @@ let writeFinishDrive = function (driveid, drivername) {
 };
 
 let writeSuccessForm = function (driveid, username) {
-    $("#divwritefinishdata").html(`<table class="table table - bordered">
+
+    ShowMap("#divwritefinishdata");
+
+    $("#divwriteinfodata").html(`<table class="table table - bordered">
         <thead>
         <tr class="success">
             <th colspan="2">
@@ -274,12 +277,9 @@ let writeSuccessForm = function (driveid, username) {
     </table >`);
 
     $("#btnFinish").click(function () {
-        var address1 = $("#txtAddress").val();
-        var x1 = $("#txtX").val();
-        var y1 = $("#txtY").val();
         var price1 = $("#nmbPrice").val();
 
-        $.get("/api/Driver/FinishDriveSuccess/", { address: address1, x: x1, y: y1, price: price1, drive: driveid, driver: username }, function () {
+        $.post("/api/Driver/FinishDriveSuccess/", { jsonLocation: jsonobj, price: price1, drive: driveid }, function () {
         }).done(function () {
             alert(`Changes successfully saved`);
             location.href = "Driver.html";
@@ -386,7 +386,7 @@ function searchByPrice(minval, maxval, index) {
     var min = parseInt(minval, 10);
     var max = parseInt(maxval, 10);
     $('#table tbody tr').each(function () {
-        var age = parseFloat($(`td:eq(${index})`, this).text()) || 0;
+        var age = parseFloat($(`td:eq(${index}):visible`, this).text()) || 0;
         if ((isNaN(min) && isNaN(max)) ||
             (isNaN(min) && age <= max) ||
             (min <= age && isNaN(max)) ||

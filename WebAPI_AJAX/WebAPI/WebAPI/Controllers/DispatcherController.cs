@@ -97,7 +97,7 @@ namespace WebAPI.Controllers
         public void AddDispDrive(string address, string x, string y, int car, string driver, string username)
         {
             Dispatcher dispatcher = Users.Dispatchers.First(d => d.UserName == username);
-            Location location = new Location() { Address = address, X = x, Y = y };
+            Location location = new Location() { Address = new Address() { Street=address}, X = x, Y = y };
             Drive drive = new Drive()
             {
                 Driver = driver,

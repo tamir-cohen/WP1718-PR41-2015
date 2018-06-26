@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         {
             HttpResponseMessage message = new HttpResponseMessage();
             Customer temp = (Customer)Users.Customers.FirstOrDefault(cust => cust.UserName == customer);
-            Location location = new Location() { Address = address, X = x, Y = y };
+            Location location = new Location() { Address = new Address() { Street=address}, X = x, Y = y };
             Drive drive = new Drive() {
                 Customer = temp.UserName,
                 DateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
         {
             Drive drive = Users.Customers.First(cust => cust.UserName == username).Drives.First(d => d.Id == driveid);
             int index = Users.Customers.First(cust => cust.UserName == username).Drives.IndexOf(drive);
-            Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.Address = address;
+            Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.Address = new Address() { Street=address};
             Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.X = x;
             Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.Y = y;
             Users.Customers.First(cust => cust.UserName == username).Drives[index].TypeOfCar = (CarType)car;

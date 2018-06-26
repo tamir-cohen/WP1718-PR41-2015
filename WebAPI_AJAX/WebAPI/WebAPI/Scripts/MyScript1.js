@@ -77,7 +77,7 @@ let writeUserDrives = function (data) {
         temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
-        temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Rate}</td>`);
+        temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
         temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Remove" type="button" value="Cancel"/><input id="C${data[drive].Id}" name="Change" type="button" value="Edit"/></td>` : ``);
         temp += ((data[drive].DriveStatus == `6`) ? `<td><input id="${data[drive].Id}" name="AddComment" type="button" value="Add comment"/>` : ``);
         temp += `</tr>`;
@@ -384,7 +384,7 @@ let writeDispDrives = function (data, user) {
         temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
-        temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Rate}</td>`);
+        temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
         temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Process" type="button" value="Process drive"/>` : ``);
         temp += `</tr>`;
     }

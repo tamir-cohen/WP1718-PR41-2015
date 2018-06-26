@@ -96,16 +96,40 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == comment.User).Available = true;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/Driver/FinishDriveSuccess/")]
-        public void FinishDriveSuccess(string address, string x, string y, string price, string drive, string driver)
+        public void FinishDriveSuccess([FromBody]JObject jsonLocation)
         {
-            int driveid = int.Parse(drive.Substring(1));
-            int driveprice;
-            int.TryParse(price, out driveprice);
+            string s = jsonLocation.ToString();
+            IList<JToken> address_list = jsonLocation["jsonLocation"]["address"].Children().ToList();
+            IList<JToken> coordinates = jsonLocation["jsonLocation"]["boundingbox"].Children().ToList();
+            Location lok = new Location();
+            lok.X = coordinates[0].ToString().Trim(new char[] { '{', '}' });
+            lok.Y = coordinates[2].ToString().Trim(new char[] { '{', '}' });
+            lok.Address = new Address();
+            foreach (var item in address_list)
+            {
+                string temp = item.ToString();
+                temp = temp.Replace("\"", "").Trim();
+                if (temp.StartsWith("house_number"))
+                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                if(temp.StartsWith("road"))
+                    lok.Address.Street = temp.Split(':')[1].Trim();
+                if(temp.StartsWith("postcode"))
+                    lok.Address.PostCode = temp.Split(':')[1].Trim();
+                if(temp.StartsWith("city"))
+                    lok.Address.City = temp.Split(':')[1].Trim();
+            }
+            string sprice = jsonLocation["price"].ToString();
+            sprice = sprice.Replace("\"", "").Trim();
+            string sdriveid = jsonLocation["drive"].ToString();
+            sdriveid = sdriveid.Replace("\"", "").Trim();
+            int driveprice = int.Parse(sprice);
+            int driveid = int.Parse(sdriveid.Substring(1));
+            string driver = Get().UserName;
+
             Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).Price = driveprice;
-            Location endLocation = new Location() { Address=address, X=x, Y=y };
-            Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).EndLocation = endLocation;
+            Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).EndLocation = lok;
             Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).DriveStatus = DriveStatus.Successful;
             Users.Drivers.First(d => d.UserName == driver).Available = true;
         }
@@ -130,13 +154,16 @@ namespace WebAPI.Controllers
             IList<JToken> coordinates = json["json"]["boundingbox"].Children().ToList();
             Location lok = new Location();
             lok.X = coordinates[0].ToString().Trim(new char[] { '{', '}' });
-            lok.X = coordinates[2].ToString().Trim(new char[] { '{', '}' });
-            lok.Address = "";
+            lok.Y = coordinates[2].ToString().Trim(new char[] { '{', '}' });
+            lok.Address = new Address();
             foreach (var item in address_list)
             {
                 string temp = item.ToString();
                 temp = temp.Replace("\"", "").Trim();
-                lok.Address += temp.Split(':')[1].Trim();
+                lok.Address.HomeNumber = temp.StartsWith("home_number") ? temp.Split(':')[1].Trim() : "bb";
+                lok.Address.Street = temp.StartsWith("road") ? temp.Split(':')[1].Trim() : "-";
+                lok.Address.PostCode = temp.StartsWith("postcode") ? temp.Split(':')[1].Trim() : "-";
+                lok.Address.City = temp.StartsWith("city") ? temp.Split(':')[1].Trim() : "-";
             }
             string username = Get().UserName;
             Users.Drivers.First(d => d.UserName == username).Location = lok;
