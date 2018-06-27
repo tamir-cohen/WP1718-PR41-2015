@@ -33,9 +33,21 @@ namespace WebAPI.Controllers
         // GET: api/Login
         [HttpGet]
         [Route("api/Login/LogOut")]
-        public void LogOut()
+        public HttpResponseMessage LogOut()
         {
+            var resp = new HttpResponseMessage();
+
+            var cookie = HttpContext.Current.Response.Cookies["MyUser"];
+            if(cookie != null)
+            {
+                HttpContext.Current.Response.Cookies["MyUser"].Value = null;
+                HttpContext.Current.Response.Cookies["MyUser"].Expires = DateTime.Now.AddDays(-1);
+            }            
+
             HttpContext.Current.Session.Abandon();
+            resp.StatusCode = HttpStatusCode.OK;
+
+            return resp;
         }
 
         // GET: api/Login/

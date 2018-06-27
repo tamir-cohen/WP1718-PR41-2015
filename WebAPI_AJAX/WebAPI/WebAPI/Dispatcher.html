@@ -23,7 +23,7 @@
                 $("#write").html(window.location.href + "#write");
             }, 5000);*/
             $("#btnLogout").click(function () {
-                $.get("/api/Login/LogOut", function () { })
+                $.get("/api/Login/LogOut", function (data) { })
                     .done(function () {
                         alert(`izlogovao se`);
                         location.href = "Login.html";

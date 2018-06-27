@@ -24,7 +24,7 @@
                 var chekbox = $("#cbRemember").val();
 
                 if (cb == `on`) {
-                    $.get("/api/Login/SaveCookie/", { un: username1 }, function () { })
+                    $.get("/api/Login/SaveCookie/", { un: username1 }, function (data) { })
                         .fail(function () {
                             alert(`Nije zapamtio cookie`)
                         });

@@ -23,8 +23,10 @@
                 $("#write").html(window.location.href + "#write");
             }, 5000);*/
             $("#btnLogout").click(function () {
-                $.get("/api/Login");
-                location.href = "Login.html";
+                $.get("/api/Login", function (data) {
+                    alert(data);
+                    location.href = "Login.html";
+                });
             });
             let user;
             $.get("/api/Customer", function (data) {
