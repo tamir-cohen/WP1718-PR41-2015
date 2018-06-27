@@ -42,7 +42,7 @@
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnCreate" class="btn btn-success" type="button" value="Create"/>
+                    <input id="btnCreate" class="btn btn-primary" type="button" value="Create"/>
                 </td>
             </tr>
         </tbody>
@@ -77,18 +77,18 @@ let writeUserDrives = function (data) {
     for (drive in data) {
         temp += `<tr>`;
         temp += (`<td>${data[drive].DateTime}</td>`);
-        temp += (`<td>${data[drive].Customer}</td>`);
-        temp += (`<td>${data[drive].Dispatcher}</td>`);
-        temp += (`<td>${data[drive].Driver}</td>`);
+        temp += (`<td>${(data[drive].Customer == null) ? `-` : data[drive].Customer}</td>`);
+        temp += (`<td>${(data[drive].Dispatcher == null) ? `-` : data[drive].Dispatcher}</td>`);
+        temp += (`<td>${(data[drive].Driver == null) ? `-` : data[drive].Driver}</td>`);
         temp += (`<td class="col1">${driveStatusToString(data[drive].DriveStatus)}</td>`);
         temp += (`<td>${carTypeToString(data[drive].TypeOfCar)}</td>`);
-        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : data[drive].StartLocation.Address}</td>`);
-        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
+        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : (data[drive].StartLocation.Address.Street + " " + data[drive].StartLocation.Address.HomeNumber + " " + data[drive].StartLocation.Address.City + " " + data[drive].StartLocation.Address.PostCode)}</td>`);
+        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : (data[drive].EndLocation.Address.Street + " " + data[drive].EndLocation.Address.HomeNumber + " " + data[drive].EndLocation.Address.City + " " + data[drive].EndLocation.Address.PostCode)}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
-        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Remove" type="button" value="Cancel"/><input id="C${data[drive].Id}" name="Change" type="button" value="Edit"/></td>` : ``);
-        temp += ((data[drive].DriveStatus == `6`) ? `<td><input id="${data[drive].Id}" name="AddComment" type="button" value="Add comment"/>` : ``);
+        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Remove" class="btn btn-primary" type="button" value="Cancel"/><input id="C${data[drive].Id}" name="Change" class="btn btn-primary" type="button" value="Edit"/></td>` : ``);
+        temp += ((data[drive].DriveStatus == `6`) ? `<td><input id="${data[drive].Id}" name="AddComment" class="btn btn-primary" type="button" value="Add comment"/>` : ``);
         temp += `</tr>`;
     };
 
@@ -97,7 +97,7 @@ let writeUserDrives = function (data) {
         <tr class="success">
             <th colspan="11" style="text-align:center">
                 User drives
-                </th>
+             </th>
         </tr>
         <tr class="success">    
             <th name="sort" style="cursor:pointer">Date & time<span name="span" class="glyphicon glyphicon-arrow-down"/></th>
@@ -117,26 +117,32 @@ let writeUserDrives = function (data) {
         </tbody>
     </table>
     <table class= "table table-bordered">
+    <thead>
+        <tr class="danger"><th>Search by date</th><th>Search by price</th><th>Search by rate</th></tr>
+    </thead>
     <tbody>
-        <tr class="success">
-            <td>From: <input type="datetime-local" id="startdatetime" /></br>To: <input type="datetime-local" id="enddatetime" /></td>
-        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-        <td>From: <input type="number" id="startprice" /></br>To: <input type="number" id="endprice" /></td> <td></td>
-    <td>From: <input type="number" id="startrate" /></br>To: <input type="number" id="endrate" /></td >
-    </tr >
-    </tbody >
-    </table >
+        <tr class="warning">
+            <td><b>From: <input type="datetime-local" id="startdatetime" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="datetime-local" id="enddatetime" /></b></td>
+            <td><b>From: <input type="number" id="startprice" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" id="endprice" /></b></td>
+            <td><b>From: <input type="number" id="startrate" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" id="endrate" /></b></td >
+        </tr>
+        <tr class="warning">
+            <td colspan="3"><b>Filter by drive status: 
+            <select id="cmbFilter">
+                <option value="All">All</option>
+                <option value="Created & Waiting">Created & Waiting</option>
+                <option value="Created">Created</option>
+                <option value="Processed">Processed</option>
+                <option value="Taken">Taken</option>
+                <option value="Canceled">Canceled</option>
+                <option value="Failed">Failed</option>
+                <option value="Successful">Successful</option>
+            </select></b></td>
+        </tr>
+    </tbody>
+    </table>
     <div>
-        <select id="cmbFilter">
-            <option value="All">All</option>
-            <option value="Created & Waiting">Created & Waiting</option>
-            <option value="Created">Created</option>
-            <option value="Processed">Processed</option>
-            <option value="Taken">Taken</option>
-            <option value="Canceled">Canceled</option>
-            <option value="Failed">Failed</option>
-            <option value="Successful">Successful</option>
-        </select>
+        
     </div>`);
 
     $("#startdatetime").change(function () {
@@ -273,7 +279,7 @@ let writeChangeDrive = function (drive) {
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnChange" class="btn btn-success" type="button" value="Save Changes"/>
+                    <input id="btnChange" class="btn btn-primary" type="button" value="Save Changes"/>
                 </td>
             </tr>
         </tbody>
@@ -326,7 +332,7 @@ let writeCommentInput = function (driveid, username) {
             </td>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnSendComment" class="btn btn-success" type="button" value="Post comment"/>
+                    <input id="btnSendComment" class="btn btn-primary" type="button" value="Post comment"/>
                 </td>
             </tr>
         </tbody>
@@ -389,12 +395,12 @@ let writeDispDrives = function (data, user) {
         temp += (`<td>${(data[drive].Driver == null) ? `-` : drivsurname}</td>`);
         temp += (`<td class="col1">${driveStatusToString(data[drive].DriveStatus)}</td>`);
         temp += (`<td>${carTypeToString(data[drive].TypeOfCar)}</td>`);
-        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : data[drive].StartLocation.Address}</td>`);
-        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : data[drive].EndLocation.Address}</td>`);
+        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : (data[drive].StartLocation.Address.Street + " " + data[drive].StartLocation.Address.HomeNumber + " " + data[drive].StartLocation.Address.City + " " + data[drive].StartLocation.Address.PostCode)}</td>`);
+        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : (data[drive].EndLocation.Address.Street + " " + data[drive].EndLocation.Address.HomeNumber + " " + data[drive].EndLocation.Address.City + " " + data[drive].EndLocation.Address.PostCode)}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
-        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Process" type="button" value="Process drive"/>` : ``);
+        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="${data[drive].Id}" name="Process" class="btn btn-primary" type="button" value="Process drive"/>` : ``);
         temp += `</tr>`;
     }
 
@@ -575,7 +581,7 @@ let writeDispDrives = function (data, user) {
 let writeNewDispDrive = function (user, drivers) {
     let temp = ``;
     for (driver in drivers) {
-        temp += `<option value="${drivers[driver].UserName}">${drivers[driver].UserName} - ${drivers[driver].Name}`+` ${drivers[driver].Surname}</option>`
+        temp += `<option value="${drivers[driver].UserName}">${drivers[driver].UserName} - ${drivers[driver].Name}` + ` ${drivers[driver].Surname}` + `${carTypeToString(drivers[driver].Car.Type)}</option>`
     }
     ShowMap("#divwriteuserdata");
     $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
@@ -620,7 +626,7 @@ let writeNewDispDrive = function (user, drivers) {
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnCreate" class="btn btn-success" type="button" value="Create"/>
+                    <input id="btnCreate" class="btn btn-primary" type="button" value="Create"/>
                 </td>
             </tr>
         </tbody>
@@ -690,7 +696,7 @@ let processDrive = function (driveid, user, customer) {
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnProcess1" class="btn btn-success" type="button" value="Process"/>
+                    <input id="btnProcess1" class="btn btn-primary" type="button" value="Process"/>
                 </td>
             </tr>
         </tbody>
@@ -741,7 +747,7 @@ let addComment = function (driveid, username) {
             </td>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnAddComment" class="btn btn-success" type="button" value="Post comment"/>
+                    <input id="btnAddComment" class="btn btn-primary" type="button" value="Post comment"/>
                 </td>
             </tr>
         </tbody>

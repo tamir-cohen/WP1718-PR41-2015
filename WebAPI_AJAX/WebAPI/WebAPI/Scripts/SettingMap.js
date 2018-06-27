@@ -21,11 +21,52 @@ let foo = function () {
 }
 
 let foof1 = function () {
-    $("#btnSubmitLoc").click(function () {
-        alert(jsonobj);
+    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
+        <thead>
+        <tr class="success">
+            <th colspan="2">
+                Location details preview
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Your current address:</td>
+            <td>
+                <input type="text" id="txtAddress"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Coordinates:</td>
+            <td>
+                <input type="text" id="txtX"/>
+                <input type="text" id="txtY"/>
+            </td>
+        </tr>
+        <tr class="success">
+                <td colspan="2">
+                    <input id="btnSaveLoc" class="btn btn-primary" type="button" value="Save location"/>
+                </td>
+            </tr>
+        </tbody>
+    </table >`);
+
+    $("#btnSaveLoc").click(function () {
         $.post("/api/Driver/SetLocation/", { json: jsonobj }, function () { })
             .fail(function () {
                 alert(`error while sending address`);
+            });
+    });
+
+    $("#btnSubmitLoc").click(function () {
+        alert(jsonobj);
+        $.post("/api/Customer/GetLocation/", { json: jsonobj }, function (location) {
+            $("#txtAddress").val(location.Address.Street + location.Address.HomeNumber);
+            $("#txtX").val(location.X);
+            $("#txtY").val(location.Y);
+        })
+            .fail(function () {
+                alert(`error while sending location`);
             });
     });
 }
@@ -73,7 +114,7 @@ function addMarker(lon, lat, icon) {
 }
 
 function reverseGeocode(coords) {
-    fetch('http://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
         .then(function (response) {
             return response.json();
         }).then(function (json) {

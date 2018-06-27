@@ -17,19 +17,19 @@
         <tr>
             <td>Name:</td>
             <td>
-                ` + user.Name + `
+                ` + (user.Name == null) ? `-` : user.Name + `
                 </td>
         </tr>
         <tr>
             <td>Surname:</td>
             <td>
-                ` + user.Surname + `
+                ` + (user.Surname == null) ? `-` : user.Surname + `
                 </td>
         </tr>
         <tr>
             <td>Contact number:</td>
             <td>
-                ` + user.ContactNumber + `
+                ` + (user.ContactNumber == null) ? `-` : user.ContactNumber + `
                 </td>
         </tr>
         <tr>
@@ -41,17 +41,45 @@
         <tr>
             <td>UPRN:</td>
             <td>
-                ` + user.UPRN + `
+                ` + (user.UPRN == null) ? `-` : user.UPRN + `
                 </td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>
-                ` + user.Email + `
+                ` + (user.Email == null) ? `-` : user.Email + `
                 </td>
         </tr>
     </tbody>
     </table >`);
+
+    if (user.Role == 1 && user.Car != null) {
+        $("#divwriteuserdata").append(writeModalCar(user.Car))
+    }
+};
+
+let writeModalCar = function (car) {
+    return `<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#MyModal${car.TaxiId}">View car details</button>
+    <div id="MyModal${car.TaxiId}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:orange;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Car details</h3>
+                </div>
+                <div class="modal-body">
+                    <p><b>Age: ${car.Age}</b></p>
+                    <p><b>Driver: ${car.Driver}</b></p>
+                    <p><b>Registration number: ${car.RegNumber}</b></p>
+                    <p><b>Taxi id: ${car.TaxiId}</b></p></br>
+                    <p><b>Type: ${carTypeToString(car.Type)}</b></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>`
 };
 
 let writeChangeUserData = function (user) {
@@ -82,19 +110,19 @@ let writeChangeUserData = function (user) {
         <tr>
             <td>Name:</td>
             <td>
-                <input type="text" id="txtName" value="`+ user.Name + `"/>
+                <input type="text" id="txtName" value="`+ (user.Name == null) ? `-` : user.Name + `"/>
                 </td>
         </tr>
         <tr>
             <td>Surname:</td>
             <td>
-                <input type="text" id="txtSurname" value="`+ user.Surname + `"/>
+                <input type="text" id="txtSurname" value="`+ (user.Surname == null) ? `-` : user.Surname + `"/>
                 </td>
         </tr>
         <tr>
             <td>Contact number:</td>
             <td>
-                <input type="text" id="txtNumber" value="`+ user.ContactNumber + `"/>
+                <input type="text" id="txtNumber" value="`+ (user.ContactNumber == null) ? `-` : user.ContactNumber + `"/>
                 </td>
         </tr>
         <tr>
@@ -107,18 +135,18 @@ let writeChangeUserData = function (user) {
         <tr>
             <td>UPRN:</td>
             <td>
-                <input type="text" id="txtUPRN" value="`+ user.UPRN + `"/>
+                <input type="text" id="txtUPRN" value="`+ (user.UPRN == null) ? `-` : user.UPRN + `"/>
                 </td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>
-                <input type="text" id="txtEmail" value="`+ user.Email + `"/>
+                <input type="text" id="txtEmail" value="`+ (user.Email == null) ? `-` : user.Email + `"/>
                 </td>
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnChange" class="btn btn-success" type="button"
+                    <input id="btnChange" class="btn btn-primary" type="button"
                            value="Save changes" />
                 </td>
             </tr>
@@ -200,7 +228,7 @@ let writeChangePassword = function (user) {
         }
         else {
             if (password != confirmpassword) {
-                alert(`Confirm password does not match to new one`);
+                alert(`Confirmation password does not match to new one`);
             }
             else {
                 $.post("/api/" + html, { username: user.UserName, password: password, name: user.Name, surname: user.Surname, contactNumber: user.ContactNumber, gender: user.Gender, uprn: user.UPRN, email: user.Email }, function (data) {
@@ -215,4 +243,26 @@ let writeChangePassword = function (user) {
         }
 
     });
+};
+
+let writeModalLocation = function (location) {
+    $("#myloc").html(`<div id="myloc" class="modal fade" role="dialog"><div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:orange;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Current location</h3>
+            </div>
+            <div class="modal-body">
+                <p><b>Street: ${(location.Address.Street == null) ? `-` : location.Address.Street}</b></p>
+                <p><b>House number: ${(location.Address.HomeNumber == null) ? `-` : location.Address.HomeNumber}</b></p>
+                <p><b>City: ${(location.Address.City == null) ? `-` : location.Address.City}</b></p>
+                <p><b>Post code: ${(location.Address.PostCode == null) ? `-` : location.Address.PostCode}</b></p></br>
+                <p><b>Longitude: ${(location.X == null) ? `-` : location.X}</b></p>
+                <p><b>Latitude: ${(location.Y == null) ? `-` : location.Y}</b></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div ></div>`);
 };

@@ -193,6 +193,7 @@
     <Content Include="Driver.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\regbackg.jpg" />
     <Content Include="index.html" />
     <Content Include="Login.html" />
     <Content Include="Registracija.html" />

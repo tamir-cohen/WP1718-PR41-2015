@@ -7,7 +7,7 @@ namespace WebAPI.Models
 {
     public class Car
     {
-        public Driver Driver { get; set; }
+        public string Driver { get; set; }
         public int Age { get; set; }
         public string RegNumber { get; set; }
         public int TaxiId { get; set; }

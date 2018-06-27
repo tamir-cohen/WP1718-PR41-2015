@@ -55,15 +55,14 @@ let writeDriverDrives = function (data, username) {
         temp += (`<td>${(data[drive].Dispatcher == null) ? `-` : data[drive].Dispatcher}</td>`);
         temp += (`<td>${(data[drive].Driver == null) ? `-` : data[drive].Driver}</td>`);
         temp += (`<td class="col1">${driveStatusToString(data[drive].DriveStatus)}</td>`);
-        temp += (`<td>${data[drive].TypeOfCar}</td>`);
-        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : (data[drive].StartLocation.Address.Street + data[drive].StartLocation.Address.HomeNumber + "<br/>" + data[drive].StartLocation.Address.City + data[drive].StartLocation.Address.PostCode)}</td>`);
-        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : (data[drive].EndLocation.Address.Street + data[drive].EndLocation.Address.HomeNumber + "\n" + data[drive].EndLocation.Address.City + data[drive].EndLocation.Address.PostCode)}</td>`);
+        temp += (`<td>${carTypeToString(data[drive].TypeOfCar)}</td>`);
+        temp += (`<td>${(data[drive].StartLocation == null) ? `-` : (data[drive].StartLocation.Address.Street +" "+ data[drive].StartLocation.Address.HomeNumber +" "+  data[drive].StartLocation.Address.City +" "+ data[drive].StartLocation.Address.PostCode)}</td>`);
+        temp += (`<td>${(data[drive].EndLocation == null) ? `-` : (data[drive].EndLocation.Address.Street +" "+ data[drive].EndLocation.Address.HomeNumber + " " + data[drive].EndLocation.Address.City +" "+ data[drive].EndLocation.Address.PostCode)}</td>`);
         temp += (`<td>${data[drive].Price}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `-` : writeModal(data[drive].Comment)}</td >`);
-        //temp += (`<td>${(data[drive].Comment == null) ? `-` : data[drive].Comment.Description}</td>`);
         temp += (`<td>${(data[drive].Comment == null) ? `0` : data[drive].Comment.Rate}</td>`);
-        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="T${data[drive].Id}" type="button" name="Take" value="Take drive"/></td>` : ``);
-        temp += ((data[drive].DriveStatus == `1` || data[drive].DriveStatus == `2` || data[drive].DriveStatus == `3`) ? `<td><input id="F${data[drive].Id}" name="Finish" type="button" value="Finish drive"/></td>` : ``);
+        temp += ((data[drive].DriveStatus == `0`) ? `<td><input id="T${data[drive].Id}" type="button" class="btn btn-primary" name="Take" value="Take drive"/></td>` : ``);
+        temp += ((data[drive].DriveStatus == `1` || data[drive].DriveStatus == `2` || data[drive].DriveStatus == `3`) ? `<td><input id="F${data[drive].Id}" name="Finish" class="btn btn-primary" type="button" value="Finish drive"/></td>` : ``);
         temp += `</tr>`;
     };
 
@@ -252,17 +251,17 @@ let writeSuccessForm = function (driveid, username) {
 
     ShowMap("#divwritefinishdata");
 
-    $("#divwriteinfodata").html(`<table class="table table - bordered">
+    $("#divwritefinishdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
         <thead>
         <tr class="success">
             <th colspan="2">
-                Closing drive parameters
+                Create new drive
             </th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Destination address:</td>
+            <td>Your current address:</td>
             <td>
                 <input type="text" id="txtAddress"/>
             </td>
@@ -282,7 +281,7 @@ let writeSuccessForm = function (driveid, username) {
         </tr>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnFinish" class="btn btn-success" type="button" value="Finish"/>
+                    <input id="btnFinish" class="btn btn-primary" type="button" value="Finish"/>
                 </td>
             </tr>
         </tbody>
@@ -319,7 +318,7 @@ let writeFailForm = function (driveid, username) {
             </td>
         <tr class="success">
                 <td colspan="2">
-                    <input id="btnSendComment" class="btn btn-success" type="button" value="Post comment"/>
+                    <input id="btnSendComment" class="btn btn-primary" type="button" value="Post comment"/>
                 </td>
             </tr>
         </tbody>
@@ -427,7 +426,7 @@ let writeModal = function (data) {
                     <p>Description: <textarea rows="3" cols="50" readonly="true">${data.Description}</textarea></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
