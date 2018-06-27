@@ -36,6 +36,7 @@
                 }
                 $("#write").html(data.UserName);
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
+                writeModalLocation(data.Location);
             });
 
             $("#writeuserdata").click(function () {
@@ -95,25 +96,27 @@
                         <span class="glyphicon glyphicon-log-out"></span> Log out
                     </button>
                 </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a id="lnk" data-toggle="modal" data-target="#myloc" href="#">Current Location</a></li>
-                        <li class="dropdown">
-                            <a href="#" id="writelink" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a id="writeuserdata" href="#">User data</a></li>
-                                <li><a id="writechangedata" href="#">Change user data</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a id="writechangepassword" href="#">Change password</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="lnk" data-toggle="modal" data-target="#myloc" href="#">Current Location</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="writelink" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="writeuserdata" href="#">User data</a></li>
+                            <li><a id="writechangedata" href="#">Change user data</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a id="writechangepassword" href="#">Change password</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 
     <p id="write">
-
     </p>
+
+    <div id="divwritemodal"></div>
+
     <button type="button" id="btnWriteDrives" class="btn btn-sm">
         <span class="glyphicon glyphicon-arrow-down"></span> List unprocessed drives
     </button>

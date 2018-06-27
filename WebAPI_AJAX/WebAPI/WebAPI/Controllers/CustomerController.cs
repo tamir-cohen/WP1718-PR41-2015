@@ -12,11 +12,13 @@ namespace WebAPI.Controllers
 {
     public class CustomerController : ApiController
     {
+        [MyAuthorization(Roles = "Customer")]
         public List<Drive> Get(string username) {
             List<Drive> drives = Users.Customers.FirstOrDefault(cust => cust.UserName == username).Drives;
             return drives;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpGet]
         [Route("api/Customer/GetDrive/")]
         public Drive GetDrive(string driveid, string username)
@@ -27,12 +29,14 @@ namespace WebAPI.Controllers
             return drive;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         public Customer Get()
         {
             Customer customer = (Customer)HttpContext.Current.Session["MyUser1"];
             return customer;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpPost]
         [Route("api/Customer/CreateDrive")]
         public void CreateDrive([FromBody]JObject json)
@@ -74,6 +78,7 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/Customer
+        [MyAuthorization(Roles = "Customer")]
         public HttpResponseMessage Post([FromBody]Customer value)
         {
             value.Role = Roles.Customer;
@@ -94,6 +99,7 @@ namespace WebAPI.Controllers
             return message;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpGet]
         [Route("api/Customer/RemoveDrive/")]
         public void RemoveDrive(string driveid, string username)
@@ -105,6 +111,7 @@ namespace WebAPI.Controllers
             Users.Customers.First(cust => cust.UserName == username).Drives[index].DriveStatus = DriveStatus.Canceled;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpGet]
         [Route("api/Customer/ChangeDrive/")]
         public void ChangeDrive(int driveid, string address, string x, string y, int car, string username)
@@ -117,6 +124,7 @@ namespace WebAPI.Controllers
             Users.Customers.First(cust => cust.UserName == username).Drives[index].TypeOfCar = (CarType)car;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpPost]
         [Route("api/Customer/PostComment/")]
         public void PostComment([FromBody]Comment comment)
@@ -125,6 +133,7 @@ namespace WebAPI.Controllers
             Users.Customers.First(c => c.UserName == comment.User).Drives.First(d => d.Id == driveid).Comment = comment;
         }
 
+        [MyAuthorization(Roles = "Customer")]
         [HttpPost]
         [Route("api/Customer/GetLocation")]
         public Location GetLocation([FromBody]JObject json)
@@ -152,11 +161,13 @@ namespace WebAPI.Controllers
         }
 
         // PUT: api/Customer/5
+        [MyAuthorization(Roles = "Customer")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
         // DELETE: api/Customer/5
+        [MyAuthorization(Roles = "Customer")]
         public void Delete(int id)
         {
         }

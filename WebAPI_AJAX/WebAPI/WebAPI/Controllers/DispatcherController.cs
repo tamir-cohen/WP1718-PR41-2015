@@ -13,6 +13,7 @@ namespace WebAPI.Controllers
     public class DispatcherController : ApiController
     {
         // GET: api/Dispather/5
+        [MyAuthorization(Roles = "Admin")]
         public Dispatcher Get()
         {
             Dispatcher dispatcher = (Dispatcher)HttpContext.Current.Session["MyUser1"];
@@ -20,6 +21,7 @@ namespace WebAPI.Controllers
             return dispatcher;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetAllDrives")]
         public List<Drive> GetAllDrives()
@@ -44,6 +46,7 @@ namespace WebAPI.Controllers
             return ret;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetMyDrives")]
         public List<Drive> GetMyDrives(string username)
@@ -51,6 +54,7 @@ namespace WebAPI.Controllers
             return Users.Dispatchers.First(d => d.UserName == username).Drives;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/ProcessDrive/")]
         public void ProcessDrive(string driver, string username, string cust, string drive)
@@ -65,6 +69,7 @@ namespace WebAPI.Controllers
             Users.Drivers.First(driv => driv.UserName == driver).Available = false;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetAvailableDrivers")]
         public List<Driver> GetAvailableDrivers()
@@ -72,6 +77,7 @@ namespace WebAPI.Controllers
             return Users.Drivers.Where(d => d.Available).ToList();
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetClosestDrivers")]
         public List<Driver> GetClosestDrivers(string x1, string y1)
@@ -84,6 +90,7 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/Dispather
+        [MyAuthorization(Roles = "Admin")]
         public HttpResponseMessage Post([FromBody]Dispatcher value)
         {
             value.Role = Roles.Admin;
@@ -104,6 +111,7 @@ namespace WebAPI.Controllers
             return message;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/AddDispDrive/")]
         public void AddDispDrive(string address, string x, string y, int car, string driver, string username)
@@ -125,6 +133,7 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == driver).Available = false;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpPost]
         [Route("api/Dispatcher/AddNewDriver/")]
         public HttpResponseMessage AddNewDriver([FromBody]Driver value)
@@ -146,6 +155,7 @@ namespace WebAPI.Controllers
             return message;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetUsers")]
         public List<string> GetUsers()
@@ -163,6 +173,7 @@ namespace WebAPI.Controllers
             return ret;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetUserNameAndSurname/")]
         public string GetUserNameAndSurname(string username)
@@ -177,6 +188,7 @@ namespace WebAPI.Controllers
             return ret;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/BlockUser/")]
         public List<string> BlockUser(string username)
@@ -195,6 +207,7 @@ namespace WebAPI.Controllers
             return GetUsers();
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpPost]
         [Route("api/Dispatcher/GetLocation")]
         public Location GetLocation([FromBody]JObject json)
@@ -221,6 +234,7 @@ namespace WebAPI.Controllers
             return lok;
         }
 
+        [MyAuthorization(Roles = "Admin")]
         [HttpGet]
         [Route("api/Dispatcher/GetDrivers")]
         public List<Driver> GetDrivers(string username, string drive)
@@ -230,16 +244,6 @@ namespace WebAPI.Controllers
             string y1 = Users.Customers.FirstOrDefault(c => c.UserName == username).Drives.FirstOrDefault(d => d.Id == driveid).StartLocation.Y;
 
             return GetClosestDrivers(x1, y1);
-        }
-
-        // PUT: api/Dispather/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Dispather/5
-        public void Delete(int id)
-        {
         }
     }
 

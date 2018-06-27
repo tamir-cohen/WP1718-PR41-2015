@@ -13,6 +13,7 @@ namespace WebAPI.Controllers
 {
     public class DriverController : ApiController
     {
+        [MyAuthorization(Roles = "Driver")]
         public Driver Get()
         {
             Driver driver = (Driver)HttpContext.Current.Session["MyUser1"];
@@ -20,6 +21,7 @@ namespace WebAPI.Controllers
             return driver;
         }
 
+        [MyAuthorization(Roles = "Driver")]
         [HttpGet]
         [Route("api/Driver/GetAllDrives")]
         public List<Drive> GetAllDrives()
@@ -33,6 +35,7 @@ namespace WebAPI.Controllers
             return ret;
         }
 
+        [MyAuthorization(Roles = "Driver")]
         [HttpGet]
         [Route("api/Driver/GetMyDrives")]
         public List<Drive> GetMyDrives(string username)
@@ -40,6 +43,7 @@ namespace WebAPI.Controllers
             return Users.Drivers.First(d => d.UserName == username).Drives;
         }
 
+        [MyAuthorization(Roles = "Driver")]
         [HttpGet]
         [Route("api/Driver/TakeDrive/")]
         public void TakeDrive(string drive, string user)
@@ -65,6 +69,7 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/Dispather
+        [MyAuthorization(Roles = "Driver")]
         public HttpResponseMessage Post([FromBody]Driver value)
         {
             value.Role = Roles.Driver;
@@ -85,6 +90,7 @@ namespace WebAPI.Controllers
             return message;
         }
 
+        [MyAuthorization(Roles = "Driver")]
         [HttpPost]
         [Route("api/Driver/FinishDriveFail/")]
         public void FinishDriveFail([FromBody]Comment comment)
@@ -96,6 +102,7 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == comment.User).Available = true;
         }
 
+        [MyAuthorization(Roles = "Driver")]
         [HttpPost]
         [Route("api/Driver/FinishDriveSuccess/")]
         public void FinishDriveSuccess([FromBody]JObject jsonLocation)
@@ -134,39 +141,41 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == driver).Available = true;
         }
 
-        // PUT: api/Driver/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Driver/5
-        public void Delete(int id)
-        {
-        }
-
+        [MyAuthorization(Roles = "Driver")]
         [HttpPost]
         [Route("api/Driver/SetLocation/")]
         public void SetLocation([FromBody]JObject json)
         {
-            string s = json.ToString();
+            Location lok = GetLocation(json);
+            string username = Get().UserName;
+            Users.Drivers.First(d => d.UserName == username).Location = lok;
+        }
 
+        [MyAuthorization(Roles = "Driver")]
+        [HttpPost]
+        [Route("api/Driver/GetLocation")]
+        public Location GetLocation([FromBody]JObject json)
+        {
+            string s = json.ToString();
             IList<JToken> address_list = json["json"]["address"].Children().ToList();
-            IList<JToken> coordinates = json["json"]["boundingbox"].Children().ToList();
             Location lok = new Location();
-            lok.X = coordinates[0].ToString().Trim(new char[] { '{', '}' });
-            lok.Y = coordinates[2].ToString().Trim(new char[] { '{', '}' });
+            lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
+            lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
             lok.Address = new Address();
             foreach (var item in address_list)
             {
                 string temp = item.ToString();
                 temp = temp.Replace("\"", "").Trim();
-                lok.Address.HomeNumber = temp.StartsWith("home_number") ? temp.Split(':')[1].Trim() : "bb";
-                lok.Address.Street = temp.StartsWith("road") ? temp.Split(':')[1].Trim() : "-";
-                lok.Address.PostCode = temp.StartsWith("postcode") ? temp.Split(':')[1].Trim() : "-";
-                lok.Address.City = temp.StartsWith("city") ? temp.Split(':')[1].Trim() : "-";
+                if (temp.StartsWith("house_number"))
+                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("road"))
+                    lok.Address.Street = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("postcode"))
+                    lok.Address.PostCode = temp.Split(':')[1].Trim();
+                if (temp.StartsWith("city"))
+                    lok.Address.City = temp.Split(':')[1].Trim();
             }
-            string username = Get().UserName;
-            Users.Drivers.First(d => d.UserName == username).Location = lok;
+            return lok;
         }
     }
 }

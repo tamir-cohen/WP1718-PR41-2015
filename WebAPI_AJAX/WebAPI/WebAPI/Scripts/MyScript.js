@@ -17,19 +17,19 @@
         <tr>
             <td>Name:</td>
             <td>
-                ` + (user.Name == null) ? `-` : user.Name + `
+                ` + ((user.Name == null) ? `-` : user.Name) + `
                 </td>
         </tr>
         <tr>
             <td>Surname:</td>
             <td>
-                ` + (user.Surname == null) ? `-` : user.Surname + `
+                ` + ((user.Surname == null) ? `-` : user.Surname) + `
                 </td>
         </tr>
         <tr>
             <td>Contact number:</td>
             <td>
-                ` + (user.ContactNumber == null) ? `-` : user.ContactNumber + `
+                ` + ((user.ContactNumber == null) ? `-` : user.ContactNumber) + `
                 </td>
         </tr>
         <tr>
@@ -41,13 +41,13 @@
         <tr>
             <td>UPRN:</td>
             <td>
-                ` + (user.UPRN == null) ? `-` : user.UPRN + `
+                ` + ((user.UPRN == null) ? `-` : user.UPRN) + `
                 </td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>
-                ` + (user.Email == null) ? `-` : user.Email + `
+                ` + ((user.Email == null) ? `-` : user.Email) + `
                 </td>
         </tr>
     </tbody>
@@ -110,19 +110,19 @@ let writeChangeUserData = function (user) {
         <tr>
             <td>Name:</td>
             <td>
-                <input type="text" id="txtName" value="`+ (user.Name == null) ? `-` : user.Name + `"/>
+                <input type="text" id="txtName" value="`+ ((user.Name == null) ? `-` : user.Name) + `"/>
                 </td>
         </tr>
         <tr>
             <td>Surname:</td>
             <td>
-                <input type="text" id="txtSurname" value="`+ (user.Surname == null) ? `-` : user.Surname + `"/>
+                <input type="text" id="txtSurname" value="`+ ((user.Surname == null) ? `-` : user.Surname) + `"/>
                 </td>
         </tr>
         <tr>
             <td>Contact number:</td>
             <td>
-                <input type="text" id="txtNumber" value="`+ (user.ContactNumber == null) ? `-` : user.ContactNumber + `"/>
+                <input type="text" id="txtNumber" value="`+ ((user.ContactNumber == null) ? `-` : user.ContactNumber) + `"/>
                 </td>
         </tr>
         <tr>
@@ -135,13 +135,13 @@ let writeChangeUserData = function (user) {
         <tr>
             <td>UPRN:</td>
             <td>
-                <input type="text" id="txtUPRN" value="`+ (user.UPRN == null) ? `-` : user.UPRN + `"/>
+                <input type="text" id="txtUPRN" value="`+ ((user.UPRN == null) ? `-` : user.UPRN) + `"/>
                 </td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>
-                <input type="text" id="txtEmail" value="`+ (user.Email == null) ? `-` : user.Email + `"/>
+                <input type="text" id="txtEmail" value="`+ ((user.Email == null) ? `-` : user.Email) + `"/>
                 </td>
         </tr>
         <tr class="success">
@@ -246,7 +246,7 @@ let writeChangePassword = function (user) {
 };
 
 let writeModalLocation = function (location) {
-    $("#myloc").html(`<div id="myloc" class="modal fade" role="dialog"><div class="modal-dialog">
+    $("#divwritemodal").html(`<div id="myloc" class="modal fade" role="dialog"><div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:orange;">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>

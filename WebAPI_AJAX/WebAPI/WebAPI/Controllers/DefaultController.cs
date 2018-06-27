@@ -15,32 +15,40 @@ namespace WebAPI.Controllers
         [HttpGet, Route("")]
         public RedirectResult Index()
         {
-            var cookie = Request.Headers.GetCookies("MyUser").FirstOrDefault();
-            if(cookie == null)
+            User userFromSession = (User)HttpContext.Current.Session["MyUser1"];
+            if (userFromSession != null)
             {
                 var requestUri = Request.RequestUri;
-                return Redirect(requestUri.AbsoluteUri + "Login.html");
+                return Redirect(requestUri.AbsoluteUri + (userFromSession.Role.ToString() == "Admin" ? "Dispatcher" : userFromSession.Role.ToString()) + ".html");
             }
-            else
-            {
-                string CookieName = cookie["MyUser"].Value;
-                User user = null;
-
-                if ((user = Users.Dispatchers.FirstOrDefault(disp => disp.UserName == CookieName)) == null)
-                    if ((user = Users.Customers.FirstOrDefault(disp => disp.UserName == CookieName)) == null)
-                        user = Users.Drivers.FirstOrDefault(disp => disp.UserName == CookieName);
-
-                if (user != null)
-                {
-                    HttpContext.Current.Session["MyUser1"] = user;
-
-                    var requestUri = Request.RequestUri;
-                    return Redirect(requestUri.AbsoluteUri + (user.Role.ToString() == "Admin" ? "Dispatcher" : user.Role.ToString()) + ".html");
-                }
-                else
+            else {
+                var cookie = Request.Headers.GetCookies("MyUser").FirstOrDefault();
+                if (cookie == null)
                 {
                     var requestUri = Request.RequestUri;
                     return Redirect(requestUri.AbsoluteUri + "Login.html");
+                }
+                else
+                {
+                    string CookieName = cookie["MyUser"].Value;
+                    User user = null;
+
+                    if ((user = Users.Dispatchers.FirstOrDefault(disp => disp.UserName == CookieName)) == null)
+                        if ((user = Users.Customers.FirstOrDefault(disp => disp.UserName == CookieName)) == null)
+                            user = Users.Drivers.FirstOrDefault(disp => disp.UserName == CookieName);
+
+                    if (user != null)
+                    {
+                        HttpContext.Current.Session["MyUser1"] = user;
+
+                        var requestUri = Request.RequestUri;
+                        return Redirect(requestUri.AbsoluteUri + (user.Role.ToString() == "Admin" ? "Dispatcher" : user.Role.ToString()) + ".html");
+                    }
+                    else
+                    {
+                        var requestUri = Request.RequestUri;
+                        return Redirect(requestUri.AbsoluteUri + "Login.html");
+                    }
                 }
             }
         }

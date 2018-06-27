@@ -432,30 +432,33 @@ let writeDispDrives = function (data, user) {
         <tbody>${temp}        
         </tbody>
     </table>
-    <table class="table table-bordered">
-        <tbody>
-        <tr class="success">
-            <td>From: <input type="datetime-local" id="startdatetime"/></br>To: <input type="datetime-local" id="enddatetime"/></td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-            <td>From: <input type="number" id="startprice"/></br>To: <input type="number" id="endprice"/></td><td></td>
-            <td>From: <input type="number" id="startrate"/></br>To: <input type="number" id="endrate"/></td>
+    <table class= "table table-bordered">
+    <thead>
+        <tr class="danger"><th>Search by date</th><th>Search by price</th><th>Search by rate</th></tr>
+    </thead>
+    <tbody>
+        <tr class="warning">
+            <td><b>From: <input type="datetime-local" id="startdatetime" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="datetime-local" id="enddatetime" /></b></td>
+            <td><b>From: <input type="number" id="startprice" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" id="endprice" /></b></td>
+            <td><b>From: <input type="number" id="startrate" /></br>To: &nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" id="endrate" /></b></td >
         </tr>
-        </tbody>
+        <tr class="warning">
+            <td colspan="3"><b>Filter by drive status: 
+            <select id="cmbFilter">
+                <option value="All">All</option>
+                <option value="Created & Waiting">Created & Waiting</option>
+                <option value="Created">Created</option>
+                <option value="Processed">Processed</option>
+                <option value="Taken">Taken</option>
+                <option value="Canceled">Canceled</option>
+                <option value="Failed">Failed</option>
+                <option value="Successful">Successful</option>
+            </select></b></td>
+        </tr>
+    </tbody>
     </table>
     <div>
-        <select id="cmbFilter">
-            <option value="All">All</option>
-            <option value="Created & Waiting">Created & Waiting</option>
-            <option value="Created">Created</option>
-            <option value="Processed">Processed</option>
-            <option value="Taken">Taken</option>
-            <option value="Canceled">Canceled</option>
-            <option value="Failed">Failed</option>
-            <option value="Successful">Successful</option>
-        </select>
-    </div>
-    <div>
-        Search drives by Driver name/surname: <input id="srcD" type="text"/><br/>
+        Search drives by Driver name/surname:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input id="srcD" type="text"/><br/>
         Search drives by Customer name/surname: <input id="srcC" type="text"/> 
     </div>`);
 
@@ -675,7 +678,7 @@ let processDrive = function (driveid, user, customer) {
     let temp = ``;
     $.get("/api/Dispatcher/GetDrivers/", { username: customer, drive: driveid }, function (data) {
         for (driver in data) {
-            temp += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}` + ` ${data[driver].Surname}</option>`;
+            temp += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}  ${data[driver].Surname} - ${carTypeToString(data[driver].Car.Type)}</option >`;
         }
         $("#divwriteuserdata").html(`<table class="table table - bordered">
         <thead>

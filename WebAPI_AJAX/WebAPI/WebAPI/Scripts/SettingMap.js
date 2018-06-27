@@ -56,6 +56,7 @@ let foof1 = function () {
             .fail(function () {
                 alert(`error while sending address`);
             });
+        location.href = `Driver.html`;
     });
 
     $("#btnSubmitLoc").click(function () {
