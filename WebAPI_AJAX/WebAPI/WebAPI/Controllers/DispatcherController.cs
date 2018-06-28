@@ -218,26 +218,30 @@ namespace WebAPI.Controllers
         [Route("api/Dispatcher/GetLocation")]
         public Location GetLocation([FromBody]JObject json)
         {
-            string s = json.ToString();
-            IList<JToken> address_list = json["json"]["address"].Children().ToList();
-            Location lok = new Location();
-            lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
-            lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
-            lok.Address = new Address();
-            foreach (var item in address_list)
+            if (json != null)
             {
-                string temp = item.ToString();
-                temp = temp.Replace("\"", "").Trim();
-                if (temp.StartsWith("house_number"))
-                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("road"))
-                    lok.Address.Street = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("postcode"))
-                    lok.Address.PostCode = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("city"))
-                    lok.Address.City = temp.Split(':')[1].Trim();
+                string s = json.ToString();
+                IList<JToken> address_list = json["json"]["address"].Children().ToList();
+                Location lok = new Location();
+                lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
+                lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
+                lok.Address = new Address();
+                foreach (var item in address_list)
+                {
+                    string temp = item.ToString();
+                    temp = temp.Replace("\"", "").Trim();
+                    if (temp.StartsWith("house_number"))
+                        lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("road"))
+                        lok.Address.Street = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("postcode"))
+                        lok.Address.PostCode = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("city"))
+                        lok.Address.City = temp.Split(':')[1].Trim();
+                }
+                return lok;
             }
-            return lok;
+            return null;
         }
 
         [MyAuthorization(Roles = "Admin")]

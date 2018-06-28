@@ -535,9 +535,10 @@ let addNewDriver = function () {
         var reg = $("#txtReg").val();
         var tid = $("#txtId").val();
         var cart = $("#cmbCar").val();
+        var Car = { "Driver": "", "Age": age, "RegNumber": reg, "TaxiId": tid, "Type": cart };
 
         $.post("/api/Dispatcher/AddNewDriver/", {
-            username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
+            username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email, car: Car }, function (data) {
         }).done(function () {
             alert(`New driver registered`);
             location.href = "Dispatcher.html";

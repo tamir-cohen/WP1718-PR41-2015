@@ -41,41 +41,45 @@ namespace WebAPI.Controllers
         [Route("api/Customer/CreateDrive")]
         public void CreateDrive([FromBody]JObject json)
         {
-            string customer = Get().UserName;
-            Customer username = Users.Customers.FirstOrDefault(cust => cust.UserName == customer);
-            string s = json.ToString();
-            IList<JToken> address_list = json["json"]["address"].Children().ToList();
-            Location lok = new Location();
-            lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
-            lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
-            lok.Address = new Address();
-            foreach (var item in address_list)
+            if (json != null)
             {
-                string temp = item.ToString();
-                temp = temp.Replace("\"", "").Trim();
-                if (temp.StartsWith("house_number"))
-                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("road"))
-                    lok.Address.Street = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("postcode"))
-                    lok.Address.PostCode = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("city"))
-                    lok.Address.City = temp.Split(':')[1].Trim();
+                string customer = Get().UserName;
+                Customer username = Users.Customers.FirstOrDefault(cust => cust.UserName == customer);
+                string s = json.ToString();
+                IList<JToken> address_list = json["json"]["address"].Children().ToList();
+                Location lok = new Location();
+                lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
+                lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
+                lok.Address = new Address();
+                foreach (var item in address_list)
+                {
+                    string temp = item.ToString();
+                    temp = temp.Replace("\"", "").Trim();
+                    if (temp.StartsWith("house_number"))
+                        lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("road"))
+                        lok.Address.Street = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("postcode"))
+                        lok.Address.PostCode = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("city"))
+                        lok.Address.City = temp.Split(':')[1].Trim();
+                }
+                int car = int.Parse(json["car_type"].ToString());
+
+                Drive drive = new Drive()
+                {
+                    Customer = customer,
+                    DateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
+                    DriveStatus = DriveStatus.Created_Waiting,
+                    TypeOfCar = (CarType)car,
+                    StartLocation = lok
+                };
+
+                username.Drives.Add(drive);
+
+                HttpContext.Current.Session["MyUser1"] = username;
+                Users.WriteToFile();
             }
-            int car = int.Parse(json["car_type"].ToString());
-
-            Drive drive = new Drive() {
-                Customer = customer,
-                DateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
-                DriveStatus = DriveStatus.Created_Waiting,
-                TypeOfCar = (CarType)car,
-                StartLocation = lok
-            };
-
-            username.Drives.Add(drive);
-
-            HttpContext.Current.Session["MyUser1"] = username;
-            Users.WriteToFile();
         }
 
         // POST: api/Customer
@@ -142,26 +146,30 @@ namespace WebAPI.Controllers
         [Route("api/Customer/GetLocation")]
         public Location GetLocation([FromBody]JObject json)
         {
-            string s = json.ToString();
-            IList<JToken> address_list = json["json"]["address"].Children().ToList();
-            Location lok = new Location();
-            lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
-            lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
-            lok.Address = new Address();
-            foreach (var item in address_list)
+            if (json != null)
             {
-                string temp = item.ToString();
-                temp = temp.Replace("\"", "").Trim();
-                if (temp.StartsWith("house_number"))
-                    lok.Address.HomeNumber = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("road"))
-                    lok.Address.Street = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("postcode"))
-                    lok.Address.PostCode = temp.Split(':')[1].Trim();
-                if (temp.StartsWith("city"))
-                    lok.Address.City = temp.Split(':')[1].Trim();
+                string s = json.ToString();
+                IList<JToken> address_list = json["json"]["address"].Children().ToList();
+                Location lok = new Location();
+                lok.X = json["json"]["lon"].ToString().Trim(new char[] { '{', '}' });
+                lok.Y = json["json"]["lat"].ToString().Trim(new char[] { '{', '}' });
+                lok.Address = new Address();
+                foreach (var item in address_list)
+                {
+                    string temp = item.ToString();
+                    temp = temp.Replace("\"", "").Trim();
+                    if (temp.StartsWith("house_number"))
+                        lok.Address.HomeNumber = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("road"))
+                        lok.Address.Street = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("postcode"))
+                        lok.Address.PostCode = temp.Split(':')[1].Trim();
+                    if (temp.StartsWith("city"))
+                        lok.Address.City = temp.Split(':')[1].Trim();
+                }
+                return lok;
             }
-            return lok;
+            return null;
         }
 
         // PUT: api/Customer/5

@@ -23,25 +23,45 @@
                 var password1 = $("#txtPassword").val();
                 var chekbox = $("#cbRemember").val();
 
-                if (cb == `on`) {
-                    $.get("/api/Login/SaveCookie/", { un: username1 }, function (data) { })
-                        .fail(function () {
-                            alert(`Nije zapamtio cookie`)
-                        });
-                }
-
                 $.post("/api/Login", { username: username1, password: password1, remember: cb }, function (data) {
                     switch (data) {
                         case `Admin`:
+                            if (cb == `on`) {
+                                $.get("/api/Login/SaveCookie/", { un: username1 }, function (data) { })
+                                    .fail(function () {
+                                        alert(`Nije zapamtio cookie`)
+                                    });
+                            }
+                            $("#upozorenje").removeClass(`alert-danger`);
+                            $("#upozorenje").addClass(`hidden`);
                             location.href = `Dispatcher.html`;
                             break;
                         case `Driver`:
+                            if (cb == `on`) {
+                                $.get("/api/Login/SaveCookie/", { un: username1 }, function (data) { })
+                                    .fail(function () {
+                                        alert(`Nije zapamtio cookie`)
+                                    });
+                            }
+                            $("#upozorenje").removeClass(`alert-danger`);
+                            $("#upozorenje").addClass(`hidden`);
                             location.href = `Driver.html`;
                             break;
                         case `Customer`:
+                            if (cb == `on`) {
+                                $.get("/api/Login/SaveCookie/", { un: username1 }, function (data) { })
+                                    .fail(function () {
+                                        alert(`Nije zapamtio cookie`)
+                                    });
+                            }
+                            $("#upozorenje").removeClass(`alert-danger`);
+                            $("#upozorenje").addClass(`hidden`);
                             location.href = `Customer.html`;
                             break;
-                        default:
+                        default: $("#txtPassword").val(``);
+                            $("#upozorenje").removeClass(`hidden`);
+                            $("#upozorenje").addClass(`alert-danger`);
+                            break;
                     }
                 });                
             });
@@ -56,30 +76,33 @@
                 <th colspan="2">
                     Login
                     <a href="Registracija.html" class="btn btn-primary pull-right">
-                        Registrujte se
+                        Register
                     </a>
                 </th>
             </tr>
         </thead>
         <tbody>
+            <tr id="upozorenje" class="hidden">
+                <td colspan="2"><strong>Error!</strong> Wrong username or password.</td>
+            </tr>
             <tr>
-                <td>Korisnicko ime:</td>
+                <td>Username:</td>
                 <td>
-                    <input type="text" id="txtUsername" placeholder="Korisnicko ime..." />
+                    <input type="text" id="txtUsername" placeholder="Username..." />
                 </td>
             </tr>
             <tr>
-                <td>Sifra:</td>
+                <td>Password:</td>
                 <td>
                     <input type="password" id="txtPassword"
-                           placeholder="Sifra..." />
+                           placeholder="Password..." />
                 </td>
             </tr>
             <tr class="success">
                 <td colspan="2">
                     <input id="btnLogin" class="btn btn-primary pull-right" type="button"
                            value="Login" />
-                    <input id="cbRemember" type="checkbox" name="Remember"/>Remember me
+                    <input id="cbRemember" type="checkbox" name="Remember" />Remember me
                 </td>
             </tr>
         </tbody>

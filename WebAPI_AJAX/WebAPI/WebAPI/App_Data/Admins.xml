@@ -10,7 +10,24 @@
     <ContactNumber>021/212-467</ContactNumber>
     <Email>admin@yahoo.com</Email>
     <Role>Admin</Role>
-    <Drives />
+    <Drives>
+      <Drive>
+        <Id>0</Id>
+        <DateTime>2018-06-28T06:28:59.1573923</DateTime>
+        <StartLocation>
+          <X>19.8511410399444</X>
+          <Y>45.25745105</Y>
+          <Address>
+            <Street>Трг Републике18</Street>
+          </Address>
+        </StartLocation>
+        <TypeOfCar>Unspecified</TypeOfCar>
+        <Dispatcher>admin</Dispatcher>
+        <Driver>brankodriver</Driver>
+        <Price>0</Price>
+        <DriveStatus>Created</DriveStatus>
+      </Drive>
+    </Drives>
   </Dispatcher>
   <Dispatcher>
     <UserName>admin1</UserName>

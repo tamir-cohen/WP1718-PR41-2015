@@ -1,6 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfDriver xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Driver>
+    <UserName>brankodriver</UserName>
+    <Password>brankodriver</Password>
+    <Name>Branko</Name>
+    <Surname>Brankovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>2656526526352</UPRN>
+    <ContactNumber>021/228-110</ContactNumber>
+    <Email>brankob@teol.net</Email>
+    <Role>Driver</Role>
+    <Drives>
+      <Drive>
+        <Id>0</Id>
+        <DateTime>2018-06-28T06:28:59.1573923</DateTime>
+        <StartLocation>
+          <X>19.8511410399444</X>
+          <Y>45.25745105</Y>
+          <Address>
+            <Street>Трг Републике18</Street>
+          </Address>
+        </StartLocation>
+        <TypeOfCar>Unspecified</TypeOfCar>
+        <Dispatcher>admin</Dispatcher>
+        <Driver>brankodriver</Driver>
+        <Price>0</Price>
+        <DriveStatus>Created</DriveStatus>
+      </Drive>
+    </Drives>
+    <Location>
+      <X>19.8551423</X>
+      <Y>45.254445</Y>
+      <Address>
+        <Street>Варадински мост</Street>
+        <City>Општина Нови Сад</City>
+        <PostCode>21000</PostCode>
+      </Address>
+    </Location>
+    <Car>
+      <Age>0</Age>
+      <TaxiId>0</TaxiId>
+      <Type>Unspecified</Type>
+    </Car>
+    <Available>false</Available>
+    <Banned>false</Banned>
+  </Driver>
+  <Driver>
+    <UserName>driver4</UserName>
+    <Password>driver4</Password>
+    <Name>Filip</Name>
+    <Surname>Filipovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>251651231485</UPRN>
+    <ContactNumber>064/888-222</ContactNumber>
+    <Email>filipf@gmail.com</Email>
+    <Role>Driver</Role>
+    <Drives />
+    <Location>
+      <X>19.846954643726345</X>
+      <Y>45.254252453288956</Y>
+      <Address>
+        <Street>centar</Street>
+      </Address>
+    </Location>
+    <Car>
+      <Driver>driver4</Driver>
+      <Age>2012</Age>
+      <RegNumber>T22-R-012</RegNumber>
+      <TaxiId>5</TaxiId>
+      <Type>Van</Type>
+    </Car>
+    <Available>true</Available>
+    <Banned>false</Banned>
+  </Driver>
+  <Driver>
+    <UserName>driver5</UserName>
+    <Password>driver5</Password>
+    <Name>Jadranka</Name>
+    <Surname>Jasic</Surname>
+    <Gender>Female</Gender>
+    <UPRN>25165402125625</UPRN>
+    <ContactNumber>064/822-111</ContactNumber>
+    <Email>jadran@gmail.com</Email>
+    <Role>Driver</Role>
+    <Drives />
+    <Location>
+      <X>19.846954643726345</X>
+      <Y>45.254252453288956</Y>
+      <Address>
+        <Street>centar</Street>
+      </Address>
+    </Location>
+    <Car>
+      <Driver>driver5</Driver>
+      <Age>2008</Age>
+      <RegNumber>T92-J-600</RegNumber>
+      <TaxiId>6</TaxiId>
+      <Type>PassengerCar</Type>
+    </Car>
+    <Available>true</Available>
+    <Banned>false</Banned>
+  </Driver>
+  <Driver>
     <UserName>driver</UserName>
     <Password>driver</Password>
     <Name>Jovan</Name>
@@ -108,90 +209,6 @@
       <RegNumber>T58-L-220</RegNumber>
       <TaxiId>4</TaxiId>
       <Type>Van</Type>
-    </Car>
-    <Available>true</Available>
-    <Banned>false</Banned>
-  </Driver>
-  <Driver>
-    <UserName>driver4</UserName>
-    <Password>driver4</Password>
-    <Name>Filip</Name>
-    <Surname>Filipovic</Surname>
-    <Gender>Male</Gender>
-    <UPRN>251651231485</UPRN>
-    <ContactNumber>064/888-222</ContactNumber>
-    <Email>filipf@gmail.com</Email>
-    <Role>Driver</Role>
-    <Drives />
-    <Location>
-      <X>19.846954643726345</X>
-      <Y>45.254252453288956</Y>
-      <Address>
-        <Street>centar</Street>
-      </Address>
-    </Location>
-    <Car>
-      <Driver>driver4</Driver>
-      <Age>2012</Age>
-      <RegNumber>T22-R-012</RegNumber>
-      <TaxiId>5</TaxiId>
-      <Type>Van</Type>
-    </Car>
-    <Available>true</Available>
-    <Banned>false</Banned>
-  </Driver>
-  <Driver>
-    <UserName>driver5</UserName>
-    <Password>driver5</Password>
-    <Name>Jadranka</Name>
-    <Surname>Jasic</Surname>
-    <Gender>Female</Gender>
-    <UPRN>25165402125625</UPRN>
-    <ContactNumber>064/822-111</ContactNumber>
-    <Email>jadran@gmail.com</Email>
-    <Role>Driver</Role>
-    <Drives />
-    <Location>
-      <X>19.846954643726345</X>
-      <Y>45.254252453288956</Y>
-      <Address>
-        <Street>centar</Street>
-      </Address>
-    </Location>
-    <Car>
-      <Driver>driver5</Driver>
-      <Age>2008</Age>
-      <RegNumber>T92-J-600</RegNumber>
-      <TaxiId>6</TaxiId>
-      <Type>PassengerCar</Type>
-    </Car>
-    <Available>true</Available>
-    <Banned>false</Banned>
-  </Driver>
-  <Driver>
-    <UserName>brankodriver</UserName>
-    <Password>brankodriver</Password>
-    <Name>Branko</Name>
-    <Surname>Brankovic</Surname>
-    <Gender>Male</Gender>
-    <UPRN>2656526526352</UPRN>
-    <ContactNumber>021/228-110</ContactNumber>
-    <Email>brankob@teol.net</Email>
-    <Role>Driver</Role>
-    <Drives />
-    <Location>
-      <X>19.8551423</X>
-      <Y>45.254445</Y>
-      <Address>
-        <Street>Варадински мост</Street>
-        <City>Општина Нови Сад</City>
-        <PostCode>21000</PostCode>
-      </Address>
-    </Location>
-    <Car>
-      <Age>0</Age>
-      <TaxiId>0</TaxiId>
-      <Type>Unspecified</Type>
     </Car>
     <Available>true</Available>
     <Banned>false</Banned>

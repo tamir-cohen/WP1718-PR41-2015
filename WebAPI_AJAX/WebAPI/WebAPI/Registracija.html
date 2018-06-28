@@ -8,6 +8,46 @@
     <title></title>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#txtName").keyup(function () {
+                if ($("#txtName").val() == ``) {
+                    $(this).addClass("alert-danger");
+                } else {
+                    $(this).removeClass("alert-danger");
+                }
+            });
+
+            $("#txtSurname").keyup(function () {
+                if ($(this).val() == ``) {
+                    $(this).addClass("alert-danger");
+                } else {
+                    $(this).removeClass("alert-danger");
+                }
+            });
+
+            $("#txtNumber").keyup(function () {
+                if ($(this).val() == ``) {
+                    $(this).addClass("alert-danger");
+                } else {
+                    $(this).removeClass("alert-danger");
+                }
+            });
+
+            $("#txtUPRN").keyup(function () {
+                if ($(this).val() == ``) {
+                    $(this).addClass("alert-danger");
+                } else {
+                    $(this).removeClass("alert-danger");
+                }
+            });
+
+            $("#txtEmail").keyup(function () {
+                if ($(this).val() == ``) {
+                    $(this).addClass("alert-danger");
+                } else {
+                    $(this).removeClass("alert-danger");
+                }
+            });
+
             $("#btnRegister").click(function () {
                 var username = $("#txtUsername").val();
                 var password = $("#txtPassword").val();
@@ -17,16 +57,60 @@
                 var gender = $("input[name=gender]:checked").val();
                 var uprn = $("#txtUPRN").val();
                 var email = $("#txtEmail").val();
-                alert(gender);
 
-                $.post("/api/Registration", { username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
-                }).done(function () {
-                    alert(`Registration succeded`);
-                    location.href = "Login.html";
+                if (password.trim() != `` && username.trim() != `` && email.trim() != `` && name.trim() != `` && number != `` && uprn.length > 10 && surname.trim() != ``) {
+                    $("#upozorenje").removeClass(`alert-danger`);
+                    $("#upozorenje").addClass(`hidden`);
+
+                    $.post("/api/Registration", { username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
+                    }).done(function () {
+                        alert(`Registration succeded`);
+                        location.href = "Login.html";
                     })
-                    .fail(function () {
-                        alert('Username already exists. Try again');
-                    });
+                        .fail(function () {
+                            alert('Username already exists. Try again');
+                        });
+                }
+                else {
+                    if (name.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> name can not be empty field.</td>`);
+                        $("#txtName").focus();
+                    } else if (surname.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> surname can not be empty field.</td>`);
+                        $("#txtSurname").focus();
+                    } else if (number.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> phone number can not be empty field.</td>`);
+                        $("#txtNumber").focus();
+                    } else if (uprn.length < 10) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> too few letters for uprn.</td>`);
+                        $("#txtUPRN").focus();
+                    } else if (email.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> wrong email format.</td>`);
+                        $("#txtEmail").focus();
+                    } else if (password.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> password can not be empty string.</td>`);
+                        $("#txtPassword").val(``);
+                        $("#txtPassword").focus();
+                    } else if (username.trim() == ``) {
+                        $("#upozorenje").removeClass(`hidden`);
+                        $("#upozorenje").addClass(`alert-danger`);
+                        $("#upozorenje").html(`<td colspan="2"><strong>Error!</strong> username can not be empty string.</td>`);
+                        $("#txtUsername").val(``);
+                        $("#txtUsername").focus();
+                    }
+                }
                 
             });
         });
@@ -44,6 +128,9 @@
                 </tr>
             </thead>
             <tbody>
+                <tr id="upozorenje" class="hidden">
+                    <td colspan="2"><strong>Error!</strong>Username is taken. Try another one</td>
+                </tr>
                 <tr class="active">
                     <td>Username:</td>
                     <td>
