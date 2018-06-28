@@ -446,28 +446,28 @@ let addNewDriver = function () {
             <tr>
                 <td>Username:</td>
                 <td>
-                    <input type="text" id="txtUsername" placeholder="Korisnicko ime..." />
+                    <input type="text" id="txtUsername" placeholder="Username..." />
                 </td>
             </tr>
             <tr>
                 <td>Password:</td>
                 <td>
                     <input type="password" id="txtPassword"
-                           placeholder="Sifra..." />
+                           placeholder="Password..." />
                 </td>
             </tr>
             <tr>
                 <td>Name:</td>
                 <td>
                     <input type="text" id="txtName"
-                           placeholder="Ime..." />
+                           placeholder="Name..." />
                 </td>
             </tr>
             <tr>
                 <td>Surname:</td>
                 <td>
                     <input type="text" id="txtSurname"
-                           placeholder="Prezime..." />
+                           placeholder="Surname..." />
                 </td>
             </tr>
             <tr>
@@ -497,14 +497,30 @@ let addNewDriver = function () {
                     <input type="email" id="txtEmail" placeholder="Email..." />
                 </td>
             </tr>
-            <tr class="success">
+                <tr class="success">
                 <td colspan="2">
-                    <input id="btnRegister" class="btn btn-success" type="button"
+                    <input id="btnRegister" class="btn btn-primary" type="button"
                            value="Register" />
                 </td>
             </tr>
         </tbody>
-    </table>`);
+    </table>
+<div id="addCar"><input id="btnAddCar" class="btn btn-primary" type="button" value="Add car to driver" /></div>`);
+
+    $("#btnAddCar").click(function () {
+        $("#addCar").html(`
+    <table><tr><td>Car age</td><td><input type="number" id="txtAge" placeholder="Age of car..." /></td></tr>
+    <tr><td>Reg number</td><td><input type="text" id="txtReg" placeholder="Registration number..." /></td></tr>
+    <tr><td>Id</td><td><input type="number" id="txtId" placeholder="Taxi id..." /></td></tr>
+                <tr><td>Type of car:</td>
+            <td>
+                <select id="cmbCar">
+                    <option value="1">Passenger car</option>
+                    <option value="2">Van</option>
+                </select>
+            </td></tr></table>
+        `);
+    });
 
     $("#btnRegister").click(function () {
         var username = $("#txtUsername").val();
@@ -515,8 +531,13 @@ let addNewDriver = function () {
         var gender = $("input[name=gender]:checked").val();
         var uprn = $("#txtUPRN").val();
         var email = $("#txtEmail").val();
+        var age = $("#txtAge").val();
+        var reg = $("#txtReg").val();
+        var tid = $("#txtId").val();
+        var cart = $("#cmbCar").val();
 
-        $.post("/api/Dispatcher/AddNewDriver/", { username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
+        $.post("/api/Dispatcher/AddNewDriver/", {
+            username: username, password: password, name: name, surname: surname, contactNumber: number, gender: gender, uprn: uprn, email: email }, function (data) {
         }).done(function () {
             alert(`New driver registered`);
             location.href = "Dispatcher.html";
@@ -532,12 +553,12 @@ let writeUsers = function (data) {
     var temp = ``;
     for (user in data) {
         temp += (`<tr><td>${data[user].split(`-`)[0]}</td><td>${data[user].split(`-`)[1]}</td><td>`);
-        temp += ((data[user].split(`-`)[2] == `False`) ? `<button id="${data[user].split(`-`)[0]}" name="submit">Block</button>` : `<button id="${data[user].split(`-`)[0]}" name="submit">Unblock</button>`);
+        temp += ((data[user].split(`-`)[2] == `False`) ? `<button id="${data[user].split(`-`)[0]}" class="btn btn-danger" name="submit">Block</button>` : `<button class="btn btn-primary" id="${data[user].split(`-`)[0]}" name="submit">Unblock</button>`);
         temp += `</td></tr>`;
     }
     $("#divwriteuserdata").html(`
-    <table class="table table-bordered">
-        <thead><tr colspan="2"><td>Customers/Drivers</td></tr></thead>
+    <table class="table table-bordered" style="width:50%; text-align:center;">
+        <thead><tr class="success"><th style="text-align:center;">Customers/Drivers</th><th style="text-align:center;">Role</th><th></th></tr></thead>
         <tbody>
             ${temp}
         </tbody>

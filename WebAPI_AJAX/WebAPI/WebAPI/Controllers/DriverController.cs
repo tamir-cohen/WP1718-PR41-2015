@@ -66,6 +66,7 @@ namespace WebAPI.Controllers
             }
 
             Users.Drivers.First(d => d.UserName == user).Drives.Add(driveadd);
+            Users.WriteToFile();
         }
 
         // POST: api/Dispather
@@ -86,7 +87,7 @@ namespace WebAPI.Controllers
             }
 
             message.StatusCode = HttpStatusCode.NotAcceptable;
-
+            Users.WriteToFile();
             return message;
         }
 
@@ -100,6 +101,7 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == comment.User).Drives.First(d => d.Id == driveid).Comment = comment;
             Users.Drivers.First(d => d.UserName == comment.User).Drives.First(d => d.Id == driveid).DriveStatus = DriveStatus.Failed;
             Users.Drivers.First(d => d.UserName == comment.User).Available = true;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Driver")]
@@ -139,6 +141,7 @@ namespace WebAPI.Controllers
             Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).EndLocation = lok;
             Users.Drivers.First(d => d.UserName == driver).Drives.First(dr => dr.Id == driveid).DriveStatus = DriveStatus.Successful;
             Users.Drivers.First(d => d.UserName == driver).Available = true;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Driver")]
@@ -149,6 +152,7 @@ namespace WebAPI.Controllers
             Location lok = GetLocation(json);
             string username = Get().UserName;
             Users.Drivers.First(d => d.UserName == username).Location = lok;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Driver")]

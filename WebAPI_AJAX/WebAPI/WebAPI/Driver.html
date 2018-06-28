@@ -24,18 +24,22 @@
                 $("#write").html(window.location.href + "#write");
             }, 5000);*/
             $("#btnLogout").click(function () {
-                $.get("/api/Login", function (data) {
-                    alert(data);
-                    location.href = "Login.html";
-                });
+                $.get("/api/Login/LogOut", function (data) { })
+                    .done(function () {
+                        location.href = "Login.html";
+                    })
+                    .fail(function () {
+                        alert(`Can not log out`);
+                        location.href = "Login.html";
+                    });
             });
             let user = ``;
             $.get("/api/Driver", function (data) {
                 user = data;
-                if (data.Banned) {
+                /*if (data.Banned) {
                     $("body").attr(`style`, `padding:200px 400px 200px 400px`);
                     $("body").html(`<p><b>Administrator banned your profile so you cannot perform any actions. Contact administrators for detailed info.</b></p>`);
-                }
+                }*/
                 $("#write").html(data.UserName);
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
                 writeModalLocation(data.Location);

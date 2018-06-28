@@ -21,8 +21,10 @@ namespace WebAPI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            string path = Server.MapPath("~/App_Data/Admins.xml");
-            Users users = new Users(path);
+            string pathA = Server.MapPath("~/App_Data/Admins.xml");
+            string pathC = Server.MapPath("~/App_Data/Customers.xml");
+            string pathD = Server.MapPath("~/App_Data/Drivers.xml");
+            Users users = new Users(pathA, pathC, pathD);
         }
 
         public override void Init()

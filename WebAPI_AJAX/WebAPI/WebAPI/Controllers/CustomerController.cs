@@ -75,6 +75,7 @@ namespace WebAPI.Controllers
             username.Drives.Add(drive);
 
             HttpContext.Current.Session["MyUser1"] = username;
+            Users.WriteToFile();
         }
 
         // POST: api/Customer
@@ -95,7 +96,7 @@ namespace WebAPI.Controllers
             }
 
             message.StatusCode = HttpStatusCode.NotAcceptable;
-
+            Users.WriteToFile();
             return message;
         }
 
@@ -109,6 +110,7 @@ namespace WebAPI.Controllers
             User user = Users.Customers.First(cust => cust.UserName == username);
             int index = user.Drives.IndexOf(user.Drives.First(d => d.Id == driveToRemove));
             Users.Customers.First(cust => cust.UserName == username).Drives[index].DriveStatus = DriveStatus.Canceled;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Customer")]
@@ -122,6 +124,7 @@ namespace WebAPI.Controllers
             Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.X = x;
             Users.Customers.First(cust => cust.UserName == username).Drives[index].StartLocation.Y = y;
             Users.Customers.First(cust => cust.UserName == username).Drives[index].TypeOfCar = (CarType)car;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Customer")]
@@ -131,6 +134,7 @@ namespace WebAPI.Controllers
         {
             int driveid = int.Parse(comment.Drive);
             Users.Customers.First(c => c.UserName == comment.User).Drives.First(d => d.Id == driveid).Comment = comment;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Customer")]

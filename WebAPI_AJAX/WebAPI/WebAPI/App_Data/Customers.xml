@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCustomer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Customer>
+    <UserName>customer</UserName>
+    <Password>customer</Password>
+    <Name>Janko</Name>
+    <Surname>Jankovic</Surname>
+    <Gender>Male</Gender>
+    <UPRN>5648923157562</UPRN>
+    <ContactNumber>021/428-010</ContactNumber>
+    <Email>cust@gmail.com</Email>
+    <Role>Customer</Role>
+    <Drives />
+    <Banned>false</Banned>
+  </Customer>
+  <Customer>
+    <UserName>customer1</UserName>
+    <Password>customer1</Password>
+    <Name>Marija</Name>
+    <Surname>Markovic</Surname>
+    <Gender>Female</Gender>
+    <UPRN>5648723014987</UPRN>
+    <ContactNumber>064/825-110</ContactNumber>
+    <Email>marijam@uns.ac.rs</Email>
+    <Role>Customer</Role>
+    <Drives />
+    <Banned>false</Banned>
+  </Customer>
+  <Customer>
+    <UserName>customer2</UserName>
+    <Password>customer2</Password>
+    <Name>Ana</Name>
+    <Surname>Mitrovic</Surname>
+    <Gender>Female</Gender>
+    <UPRN>0224988652145</UPRN>
+    <ContactNumber>062/188-424</ContactNumber>
+    <Email>anam@yahoo.com</Email>
+    <Role>Customer</Role>
+    <Drives />
+    <Banned>false</Banned>
+  </Customer>
+</ArrayOfCustomer>

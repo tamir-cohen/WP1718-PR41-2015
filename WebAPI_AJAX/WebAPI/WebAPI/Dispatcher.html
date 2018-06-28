@@ -25,18 +25,16 @@
             $("#btnLogout").click(function () {
                 $.get("/api/Login/LogOut", function (data) { })
                     .done(function () {
-                        alert(`izlogovao se`);
                         location.href = "Login.html";
                     })
                     .fail(function () {
-                        alert(`nije se izlogovao`);
+                        alert(`Can not log out`);
                         location.href = "Login.html";
                     });
             });
             let user = ``;
             $.get("/api/Dispatcher", function (data) {
                 user = data;
-                $("#write").html(data.UserName);
                 $("#writelink").html(data.UserName + `<span class="caret"></span>`);
             });
 
@@ -88,8 +86,6 @@
     </script>
 </head>
 <body>
-    <h2>Dispatcher</h2>
-
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-nav">
@@ -99,7 +95,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Home</a>
+                <a class="navbar-brand" href="Dispatcher.html">Home</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
@@ -128,10 +124,6 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-
-    <p id="write">
-
-    </p>
 
     <button type="button" id="btnWriteDrives" class="btn btn-sm">
         <span class="glyphicon glyphicon-arrow-down"></span> List all drives

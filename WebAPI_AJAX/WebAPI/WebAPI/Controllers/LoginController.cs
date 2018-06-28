@@ -35,6 +35,8 @@ namespace WebAPI.Controllers
         [Route("api/Login/LogOut")]
         public HttpResponseMessage LogOut()
         {
+            Users.WriteToFile();
+
             var resp = new HttpResponseMessage();
 
             var cookie = HttpContext.Current.Response.Cookies["MyUser"];

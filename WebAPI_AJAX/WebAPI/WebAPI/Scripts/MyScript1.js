@@ -584,14 +584,14 @@ let writeDispDrives = function (data, user) {
 let writeNewDispDrive = function (user, drivers) {
     let temp = ``;
     for (driver in drivers) {
-        temp += `<option value="${drivers[driver].UserName}">${drivers[driver].UserName} - ${drivers[driver].Name}` + ` ${drivers[driver].Surname}` + `${carTypeToString(drivers[driver].Car.Type)}</option>`
+        temp += `<option value="${drivers[driver].UserName}">${drivers[driver].UserName} - ${drivers[driver].Name}` + ` ` + `${drivers[driver].Surname} - ${carTypeToString(drivers[driver].Car.Type)}</option>`
     }
     ShowMap("#divwriteuserdata");
-    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
+    $("#divwriteuserdata").append(`<br/><table class="table table - bordered" style="float:right;width:40%;height:50%;">
         <thead>
         <tr class="success">
-            <th colspan="2">
-                Create new drive
+            <th colspan="2" style="text-align:center;">
+                Location details
             </th>
         </tr>
         </thead>
@@ -605,8 +605,8 @@ let writeNewDispDrive = function (user, drivers) {
         <tr>
             <td>Coordinates:</td>
             <td>
-                <input type="text" id="txtX"/>
-                <input type="text" id="txtY"/>
+                <input type="number" id="txtX"/>
+                <input type="number" id="txtY"/>
             </td>
         </tr>
         <tr>
@@ -644,7 +644,7 @@ let writeNewDispDrive = function (user, drivers) {
             $.get("/api/Dispatcher/GetClosestDrivers/", { x1: $("#txtX").val(), y1: $("#txtY").val() }, function (data) {
                 var temp1 = ``;
                 for (driver in data) {
-                    temp1 += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}` + ` ${data[driver].Surname}</option>`
+                    temp1 += `<option value="${data[driver].UserName}">${data[driver].UserName} - ${data[driver].Name}` + " " + ` ${data[driver].Surname} - ${carTypeToString(data[driver].Car.Type)}</option>`
                 }
                 $("#cmbDriver").html(temp1);
             }).fail(function () {

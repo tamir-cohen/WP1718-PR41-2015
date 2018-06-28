@@ -15,23 +15,21 @@ namespace WebAPI.Models
                 return false;
             }
             User user = (User)HttpContext.Current.Session["MyUser1"];
-            string userRole = "";
-            switch (user.Role)
+            
+            if(user.Role.ToString() == "Driver")
             {
-                case Models.Roles.Customer:
-                    userRole = "Customer";
-                    break;
-                case Models.Roles.Admin:
-                    userRole = "Admin";
-                    break;
-                case Models.Roles.Driver:
-                    userRole = "Driver";
-                    break;
-                default:
-                    break;
+                Driver driver = (Driver)HttpContext.Current.Session["MyUser1"];
+                if (driver.Banned)
+                    return false;
+            }
+            else if(user.Role.ToString() == "Customer")
+            {
+                Customer customer = (Customer)HttpContext.Current.Session["MyUser1"];
+                if (customer.Banned)
+                    return false;
             }
 
-            if (userRole != Roles)
+            if (user.Role.ToString() != Roles)
                 return false;
 
             return true;

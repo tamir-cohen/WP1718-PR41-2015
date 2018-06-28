@@ -21,7 +21,7 @@ let foo = function () {
 }
 
 let foof1 = function () {
-    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:50%;padding:200px 0px 200px 0px;">
+    $("#divwriteuserdata").append(`<table class="table table - bordered" style="float:right;width:40%;height:50%">
         <thead>
         <tr class="success">
             <th colspan="2">
@@ -52,16 +52,15 @@ let foof1 = function () {
     </table >`);
 
     $("#btnSaveLoc").click(function () {
-        $.post("/api/Driver/SetLocation/", { json: jsonobj }, function () { })
+        $.post("/api/Driver/SetLocation/", { json: jsonobj }, function () { location.href = `Driver.html`; })
             .fail(function () {
                 alert(`error while sending address`);
             });
-        location.href = `Driver.html`;
     });
 
     $("#btnSubmitLoc").click(function () {
         alert(jsonobj);
-        $.post("/api/Customer/GetLocation/", { json: jsonobj }, function (location) {
+        $.post("/api/Driver/GetLocation/", { json: jsonobj }, function (location) {
             $("#txtAddress").val(location.Address.Street + location.Address.HomeNumber);
             $("#txtX").val(location.X);
             $("#txtY").val(location.Y);
@@ -74,8 +73,8 @@ let foof1 = function () {
 
 let ShowMap = function (placeForMap) {
     $(placeForMap).html(`<h2>Location</h2>
-    <button id="btnSubmitLoc">Submit location</button> 
-    <div id="map" class="map" style="float:left;width:50%;"></div>
+    <button class="btn btn-primary" id="btnSubmitLoc">Submit location</button>
+    <div id="map" class="map" style="float:left;width:60%;height:50%;"></div>
     `);
     foo();
 };

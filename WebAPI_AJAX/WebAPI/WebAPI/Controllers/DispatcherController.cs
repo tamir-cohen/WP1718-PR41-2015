@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Xml.Serialization;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -67,6 +69,7 @@ namespace WebAPI.Controllers
             Users.Dispatchers.First(d => d.UserName == username).Drives.Add(dr);
             Users.Drivers.First(driv => driv.UserName == driver).Drives.Add(dr);
             Users.Drivers.First(driv => driv.UserName == driver).Available = false;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Admin")]
@@ -103,11 +106,12 @@ namespace WebAPI.Controllers
                 Users.Dispatchers[index] = value;
                 HttpContext.Current.Session["MyUser1"] = value;
                 message.StatusCode = HttpStatusCode.OK;
+                Users.WriteToFile();
                 return message;
             }
 
             message.StatusCode = HttpStatusCode.NotAcceptable;
-
+            
             return message;
         }
 
@@ -131,6 +135,7 @@ namespace WebAPI.Controllers
             Users.Dispatchers.First(d => d.UserName == username).Drives.Add(drive);
             Users.Drivers.First(d => d.UserName == driver).Drives.Add(drive);
             Users.Drivers.First(d => d.UserName == driver).Available = false;
+            Users.WriteToFile();
         }
 
         [MyAuthorization(Roles = "Admin")]
@@ -147,11 +152,12 @@ namespace WebAPI.Controllers
                     {
                         Users.Drivers.Add(value);
                         message.StatusCode = HttpStatusCode.OK;
+                        Users.WriteToFile();
                         return message;
                     }
 
             message.StatusCode = HttpStatusCode.NotAcceptable;
-
+          
             return message;
         }
 

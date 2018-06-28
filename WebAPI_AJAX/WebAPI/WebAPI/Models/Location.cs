@@ -10,5 +10,10 @@ namespace WebAPI.Models
         public string X { get; set; }
         public string Y { get; set; }
         public Address Address { get; set; }
+
+        public Location()
+        {
+            Address = new Address();
+        }
     }
 }
